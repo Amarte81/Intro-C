@@ -1,0 +1,3711 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corso di Programmazione in C - Da Zero a Programmatore (10 Lezioni)</title>
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --badge-color: #38bdf8;
+      --badge-bg: rgba(56, 189, 248, 0.12);
+      --tip-color: #f59e0b;
+      --tip-bg: rgba(245, 158, 11, 0.12);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --code-bg: #0b1120;
+      --border-color: #334155;
+      --radius: 12px;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: 'Consolas', 'Fira Code', 'Courier New', monospace;
+      --transition: all 0.25s ease;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent: #0284c7;
+      --accent-glow: rgba(2, 132, 199, 0.15);
+      --badge-color: #0284c7;
+      --badge-bg: rgba(2, 132, 199, 0.1);
+      --tip-color: #d97706;
+      --tip-bg: rgba(217, 119, 6, 0.1);
+      --success: #059669;
+      --success-bg: rgba(5, 150, 105, 0.12);
+      --danger: #dc2626;
+      --danger-bg: rgba(220, 38, 38, 0.12);
+      --code-bg: #1e293b;
+      --border-color: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: white;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: #7dd3fc;
+      color: #0f172a;
+      border-color: #7dd3fc;
+    }
+
+    .slide-progress-container {
+      width: 100%;
+      height: 4px;
+      background: var(--border-color);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .slide-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* MAIN PRESENTATION */
+    main {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100vh - 120px);
+    }
+
+    .slides-wrapper {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1150px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      animation: fadeIn 0.3s ease-out;
+      user-select: text;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SLIDE HEADER & BADGES */
+    .slide-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .lesson-tag {
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .topic-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--badge-bg);
+      color: var(--badge-color);
+      border: 1px solid var(--badge-color);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .slide-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+      line-height: 1.25;
+      color: var(--text-main);
+    }
+
+    .slide-subtitle {
+      font-size: 1.08rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.6;
+    }
+
+    /* GRID & CARDS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card p, .card ul, .card ol {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .analogy-box {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--tip-color);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 1rem 0;
+    }
+
+    .analogy-title {
+      font-weight: 700;
+      color: var(--tip-color);
+      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .analogy-text {
+      color: var(--text-main);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    /* VIDEO TUTORIAL LINKS */
+    .video-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.15rem;
+      padding: 0.75rem 1.15rem;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.28);
+      border-left: 4px solid #ef4444;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .video-box-info {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .video-box-links {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .video-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #ef4444;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .video-btn:hover {
+      background: #dc2626;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    ul.feature-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul.feature-list li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.65rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    ul.feature-list li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    /* CODE BLOCKS */
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 1rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+    }
+
+    .code-header {
+      background: rgba(255,255,255,0.05);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.4rem 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    pre code {
+      display: block;
+      padding: 1rem;
+      overflow-x: auto;
+      line-height: 1.55;
+      color: #e2e8f0;
+    }
+
+    /* Syntax highlight */
+    .syn-kw { color: #f43f5e; font-weight: bold; }
+    .syn-type { color: #38bdf8; font-weight: bold; }
+    .syn-str { color: #a3e635; }
+    .syn-num { color: #fb923c; }
+    .syn-com { color: #64748b; font-style: italic; }
+    .syn-dir { color: #c084fc; }
+    .syn-fn { color: #67e8f9; }
+    .code-branch {
+      display: block;
+      padding: 3px 8px;
+      margin: 2px 0;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+    .code-branch.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-left-color: var(--accent);
+    }
+
+    /* INTERACTIVE WIDGETS */
+    .interactive-box {
+      background: rgba(56, 189, 248, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      margin: 1.25rem 0;
+    }
+
+    .interactive-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .interactive-terminal {
+      background: #000000;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      color: #38bdf8;
+      margin-top: 0.75rem;
+      min-height: 55px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    /* MEMORY MAP VISUALIZER */
+    .mem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+
+    .mem-cell {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.85rem;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .mem-cell.highlight {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      transform: scale(1.03);
+    }
+
+    .mem-addr {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .mem-val {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    .mem-name {
+      font-size: 0.82rem;
+      margin-top: 0.35rem;
+      color: var(--tip-color);
+      font-weight: 600;
+    }
+
+    /* QUIZ COMPONENT */
+    .quiz-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .quiz-question {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      line-height: 1.45;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .quiz-btn {
+      text-align: left;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 0.92rem;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .quiz-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
+    }
+
+    .quiz-btn.correct {
+      background: var(--success-bg) !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+      font-weight: bold;
+    }
+
+    .quiz-btn.incorrect {
+      background: var(--danger-bg) !important;
+      border-color: var(--danger) !important;
+      color: var(--danger) !important;
+    }
+
+    .quiz-feedback {
+      margin-top: 1rem;
+      padding: 0.85rem 1.15rem;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      display: none;
+      line-height: 1.55;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      bottom: 0;
+      z-index: 40;
+    }
+
+    .slide-counter {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .key-hints {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .kbd {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 820px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 1rem;
+    }
+
+    .toc-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toc-item:hover {
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .toc-item.current {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .toc-title {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toc-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* DASHBOARD GRID */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .dash-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 135px;
+    }
+
+    .dash-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px var(--accent-glow);
+    }
+
+    .dash-num {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+
+    .dash-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .dash-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .slide {
+        padding: 1.5rem;
+      }
+      .slide-title {
+        font-size: 1.5rem;
+      }
+      .key-hints {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">C</div>
+      <div>
+        <span>Programmare in C</span>
+        <span style="font-size: 0.75rem; color: var(--accent); display: block; font-weight: normal;">Da Zero a Programmatore &bull; 10 Lezioni</span>
+      </div>
+    </div>
+
+    <div class="nav-controls">
+      <button class="btn" onclick="openTocModal()" title="Indice delle Lezioni (M)">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>
+        <span>Indice</span>
+      </button>
+      <button class="btn" onclick="toggleTheme()" title="Cambia Tema (T)">
+        <span id="theme-icon">☀️</span>
+      </button>
+      <button class="btn" onclick="toggleFullscreen()" title="Schermo Intero (F)">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/></svg>
+      </button>
+    </div>
+    <div class="slide-progress-container">
+      <div class="slide-progress-bar" id="progressBar"></div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main>
+    <div class="slides-wrapper">
+
+      <!-- ==============================================
+           SLIDE 0: BENVENUTO & DASHBOARD
+           ============================================== -->
+      <section class="slide active" id="slide-0" data-lesson="0" data-title="Benvenuto & Mappa del Corso">
+        <div class="slide-meta">
+          <span class="lesson-tag">Corso Introduttivo</span>
+          <span class="topic-badge">Per Principianti Assoluti</span>
+        </div>
+        <h1 class="slide-title">Imparare a Programmare con il Linguaggio C</h1>
+        <p class="slide-subtitle">Benvenuto! Questo corso è pensato per chi non ha mai scritto una riga di codice. Scoprirai passo dopo passo come dare istruzioni al computer attraverso 10 lezioni interattive, esempi pratici e simulatori visivi.</p>
+
+        <div class="analogy-box">
+          <div class="analogy-title">💡 Che cos'è un programma per computer?</div>
+          <div class="analogy-text">Un programma è come una <strong>ricetta di cucina</strong>: una sequenza di istruzioni chiare e ordinate che il computer esegue fedelmente alla lettera, dal primo all'ultimo passaggio, per risolvere un problema o svolgere un compito.</div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dash-card" onclick="goToSlide(1)">
+            <div class="dash-num">01</div>
+            <div class="dash-title">Come Funziona un Computer</div>
+            <div class="dash-meta">Compilatore & Primo Programma</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(5)">
+            <div class="dash-num">02</div>
+            <div class="dash-title">Le Variabili</div>
+            <div class="dash-meta">Scatole per i Dati in Memoria</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(9)">
+            <div class="dash-num">03</div>
+            <div class="dash-title">Calcoli & I/O</div>
+            <div class="dash-meta">Operatori, printf & scanf</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(13)">
+            <div class="dash-num">04</div>
+            <div class="dash-title">Prendere Decisioni</div>
+            <div class="dash-meta">I comandi if, else e switch</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(17)">
+            <div class="dash-num">05</div>
+            <div class="dash-title">Ripetere Istruzioni</div>
+            <div class="dash-meta">I Cicli while e for</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(21)">
+            <div class="dash-num">06</div>
+            <div class="dash-title">Le Funzioni</div>
+            <div class="dash-meta">Costruire i Propri Strumenti</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(25)">
+            <div class="dash-num">07</div>
+            <div class="dash-title">Gli Array & Testo</div>
+            <div class="dash-meta">File di Dati e Stringhe</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(29)">
+            <div class="dash-num">08</div>
+            <div class="dash-title">I Puntatori</div>
+            <div class="dash-meta">Gli Indirizzi della Memoria</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(33)">
+            <div class="dash-num">09</div>
+            <div class="dash-title">Le Strutture</div>
+            <div class="dash-meta">Creare Schede di Dati Complete</div>
+          </div>
+          <div class="dash-card" onclick="goToSlide(37)">
+            <div class="dash-num">10</div>
+            <div class="dash-title">La Memoria del Computer</div>
+            <div class="dash-meta">Organizzare lo Spazio di Lavoro</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+          <button class="btn btn-primary" onclick="nextSlide()">Inizia la Lezione 1 &rarr;</button>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 1: COME FUNZIONA UN COMPUTER & PRIMO PROGRAMMA
+           ============================================== -->
+      <!-- Slide 1: Che cos'è la programmazione e il C -->
+      <section class="slide" id="slide-1" data-lesson="1" data-title="Lezione 1: Il Computer e la Programmazione">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 01 &bull; Slide 1/4</span>
+          <span class="topic-badge">Concetto Base</span>
+        </div>
+        <h2 class="slide-title">Come Pensa un Computer?</h2>
+        <p class="slide-subtitle">Un computer è una macchina incredibilmente veloce, ma non ha intelligenza propria: sa fare soltanto ciò che gli viene ordinato nei minimi dettagli.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>I Due Elementi Fondamentali</h3>
+            <ul class="feature-list">
+              <li><strong>Il Processore (CPU):</strong> è il "cervello" che esegue i calcoli uno dopo l'altro a velocità stratosferica.</li>
+              <li><strong>La Memoria (RAM):</strong> è il "banco di lavoro" temporaneo dove sono salvati i dati e le istruzioni mentre il computer è acceso.</li>
+              <li><strong>Il Linguaggio C:</strong> è un linguaggio che ci permette di spiegare alla macchina esattamente cosa fare, controllando sia i calcoli sia la memoria con la massima efficienza.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Perché Iniziare Proprio dal C?</h3>
+            <p>Imparare il C significa capire <strong>come funzionano davvero le cose</strong> sotto il cofano. È la base su cui sono stati costruiti i moderni sistemi operativi (come Windows, Linux, macOS, Android), i videogiochi e i dispositivi intelligenti.</p>
+            <p style="margin-top: 0.6rem; color: var(--text-muted); font-size: 0.9rem;">
+              Qualunque altro linguaggio tu voglia imparare in futuro ti risulterà molto più intuitivo dopo aver compreso come il C dialoga con la macchina.
+            </p>
+          </div>
+        </div>
+
+        <!-- Box di approfondimento nella parte bassa della slide -->
+        <div class="analogy-box" style="margin-top: 1.25rem;">
+          <div class="analogy-title">🚗 L'Analogia della Guida</div>
+          <div class="analogy-text">Imparare il C è come imparare a guidare con il cambio manuale: all'inizio richiede attenzione, ma dopo sarai in grado di guidare qualunque veicolo con totale padronanza.</div>
+        </div>
+      </section>
+
+      <!-- Slide 2: Il Compilatore e il Primo Programma -->
+      <section class="slide" id="slide-2" data-lesson="1" data-title="Lezione 1: Il Compilatore e il Primo Programma">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 01 &bull; Slide 2/4</span>
+          <span class="topic-badge">Il Nostro Primo Codice</span>
+        </div>
+        <h2 class="slide-title">Dal Testo al Programma: Il Compilatore</h2>
+        <p class="slide-subtitle">Il computer capisce solo numeri binari (sequenze di 0 e 1). Il <strong>compilatore</strong> è il programma che traduce il nostro codice scritto in C nel file eseguibile finale.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header">
+                <span>primo_programma.c</span>
+                <span>Codice C</span>
+              </div>
+              <pre><code><span class="syn-com">// 1. Include gli strumenti per stampare a video</span>
+<span class="syn-dir">#include</span> <span class="syn-str">&lt;stdio.h&gt;</span>
+
+<span class="syn-com">// 2. Il punto di partenza di ogni programma</span>
+<span class="syn-type">int</span> <span class="syn-fn">main</span>(<span class="syn-type">void</span>) {
+    
+    <span class="syn-com">// 3. printf mostra un messaggio sullo schermo</span>
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Ciao! Sto imparando a programmare in C.\n"</span>);
+    
+    <span class="syn-com">// 4. Indica che tutto è andato a buon fine</span>
+    <span class="syn-kw">return</span> <span class="syn-num">0</span>;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Spiegazione Passo per Passo</h3>
+            <ul class="feature-list">
+              <li><strong><code>#include &lt;stdio.h&gt;</code>:</strong> dice al computer di prendere la cassetta degli attrezzi standard per l'input e l'output (mostrare testo a video).</li>
+              <li><strong><code>main()</code>:</strong> è la porta d'ingresso. Il computer inizia a leggere ed eseguire le istruzioni da qui.</li>
+              <li><strong><code>printf(...)</code>:</strong> comando per scrivere testo. Il simbolo <code>\n</code> va a capo riga.</li>
+              <li><strong>Il punto e virgola <code>;</code>:</strong> fondamentale! Va messo alla fine di ogni comando, come il punto alla fine di una frase.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Introduzione, Compilatore e Primo Programma in C
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=lJGQHtdKIIo" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 01. Introduzione e Installazione &nearr;</a>
+            <a href="https://www.youtube.com/watch?v=7-k2VrfMD_Q" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 02. Sintassi Base del C &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3 (Slide 4 del corso): Strumenti di Sviluppo -->
+      <section class="slide" id="slide-3" data-lesson="1" data-title="Lezione 1: Compilatori e IDE">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 01 &bull; Slide 3/4</span>
+          <span class="topic-badge">Strumenti di Sviluppo</span>
+        </div>
+        <h2 class="slide-title">Dove Scrivere ed Eseguire Codice C</h2>
+        <p class="slide-subtitle">Per iniziare a programmare hai due ottime possibilità: provare all'istante senza installare nulla tramite un compilatore online, oppure installare sul tuo computer un ambiente di sviluppo dedicato (IDE).</p>
+
+        <div class="grid-2">
+          <!-- Opzione 1: Compilatore Online -->
+          <div class="card" style="border-color: var(--accent); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3>
+                <span>🌐</span> Compilatore Online (Zero Installazione)
+              </h3>
+              <p style="margin-bottom: 0.75rem;">
+                È la soluzione più rapida per chi comincia: apri il browser, scrivi il tuo codice e premi <strong>"Run"</strong> per vedere subito il risultato.
+              </p>
+              <ul class="feature-list" style="font-size: 0.88rem;">
+                <li>Nessun programma o compilatore da configurare sul computer.</li>
+                <li>Funziona direttamente su Windows, Mac, Linux e tablet.</li>
+                <li>Include console interattiva per provare <code>scanf</code> e input da tastiera.</li>
+              </ul>
+            </div>
+            <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <a href="https://www.onlinegdb.com/online_c_compiler" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration: none; font-size: 0.88rem;">
+                Apri OnlineGDB (Compilatore C) &nearr;
+              </a>
+              <a href="https://www.programiz.com/c-programming/online-compiler/" target="_blank" rel="noopener noreferrer" class="btn" style="text-decoration: none; font-size: 0.88rem;">
+                Alternativa: Programiz C &nearr;
+              </a>
+            </div>
+          </div>
+
+          <!-- Opzione 2: IDE Consigliati (Dev-C++ per progetti semplici, VS Code per progetti complessi) -->
+          <div class="card" style="border-color: var(--accent); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3>
+                <span>💻</span> Gli IDE Consigliati per il C
+              </h3>
+              <p style="margin-bottom: 0.75rem;">
+                A seconda della complessità del lavoro, ti consigliamo due ambienti di sviluppo dedicati (IDE):
+              </p>
+              <ul class="feature-list" style="font-size: 0.88rem;">
+                <li>
+                  <strong>Dev-C++ (per progetti semplici e primi passi):</strong> leggero, immediato e con il compilatore (MinGW/GCC) già integrato all'installazione. Non richiede configurazioni: crei il file, scrivi il codice e premi un solo tasto per compilare ed eseguire. Perfetto per chi inizia da zero.
+                </li>
+                <li>
+                  <strong>Visual Studio Code (per progetti più complessi):</strong> l'editor moderno più diffuso e utilizzato nel mondo professionale. Con l'estensione ufficiale <em>C/C++</em> offre strumenti avanzati, completamento del codice (IntelliSense), potente debugger integrato e gestione di progetti strutturati su più file.
+                </li>
+              </ul>
+            </div>
+            <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <a href="https://sourceforge.net/projects/embarcadero-devcpp/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration: none; font-size: 0.88rem;">
+                Scarica Dev-C++ (Semplice) &nearr;
+              </a>
+              <a href="https://code.visualstudio.com/Download" target="_blank" rel="noopener noreferrer" class="btn" style="text-decoration: none; font-size: 0.88rem;">
+                Scarica VS Code (Avanzato) &nearr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="analogy-box" style="margin-top: 1.5rem;">
+          <div class="analogy-title">💡 Suggerimento per lo studio</div>
+          <div class="analogy-text">Mentre segui le prossime lezioni, ti consigliamo di tenere aperto il <strong>compilatore online</strong> in un'altra scheda del browser: digitare e provare in prima persona gli esempi di codice ti aiuterà a comprenderli molto più velocemente!</div>
+        </div>
+      </section>
+
+      <!-- Slide 4 (Slide 5 del corso): Quiz Lezione 1 -->
+      <section class="slide" id="slide-3b" data-lesson="1" data-title="Lezione 1: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 01 &bull; Slide 4/4</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 1</h2>
+        <p class="slide-subtitle">Due domande di verifica sui concetti chiave affrontati nelle prime slide: il ruolo del compilatore e le regole fondamentali del codice C.</p>
+
+        <!-- Domanda 1 -->
+        <div class="quiz-box" id="quiz-1">
+          <div class="quiz-question">Domanda 1: Qual è il compito principale del "compilatore" in informatica?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('1', 0, false)">A) Collegare il computer alla rete internet</button>
+            <button class="quiz-btn" onclick="checkQuiz('1', 1, true)">B) Tradurre il codice scritto da noi in linguaggio macchina (0 e 1) eseguibile dal processore</button>
+            <button class="quiz-btn" onclick="checkQuiz('1', 2, false)">C) Correggere in automatico tutti gli errori grammaticali</button>
+            <button class="quiz-btn" onclick="checkQuiz('1', 3, false)">D) Ripulire lo schermo da file inutili</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-1-fb"></div>
+        </div>
+
+        <!-- Domanda 2 con codice C derivata dalle prime slide -->
+        <div class="quiz-box" id="quiz-1b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: Osserva attentamente il seguente codice C:</div>
+          <div class="code-container" style="margin: 0.75rem 0;">
+            <pre><code><span class="syn-dir">#include</span> <span class="syn-str">&lt;stdio.h&gt;</span>
+
+<span class="syn-type">int</span> <span class="syn-fn">main</span>(<span class="syn-type">void</span>) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Sto imparando a programmare in C!\n"</span>)
+    <span class="syn-kw">return</span> <span class="syn-num">0</span>;
+}</code></pre>
+          </div>
+          <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.75rem;">In base a quanto spiegato nella lezione sull'anatomia del primo programma, quale errore di sintassi impedirà al compilatore di tradurre questo codice?</p>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('1b', 0, true)">A) Manca il punto e virgola (;) alla fine dell'istruzione printf, obbligatorio come il punto alla fine di una frase</button>
+            <button class="quiz-btn" onclick="checkQuiz('1b', 1, false)">B) L'istruzione printf deve essere scritta tutta in lettere maiuscole (PRINTF)</button>
+            <button class="quiz-btn" onclick="checkQuiz('1b', 2, false)">C) Il testo tra virgolette non può contenere spazi o punti esclamativi</button>
+            <button class="quiz-btn" onclick="checkQuiz('1b', 3, false)">D) L'istruzione return 0 non è consentita all'interno della funzione main</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-1b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 2: LE VARIABILI
+           ============================================== -->
+      <!-- Slide 4: Le Variabili come Scatole -->
+      <section class="slide" id="slide-4" data-lesson="2" data-title="Lezione 2: Cosa sono le Variabili">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 02 &bull; Slide 1/4</span>
+          <span class="topic-badge">Concetto Base</span>
+        </div>
+        <h2 class="slide-title">Le Variabili: Scatole per Ricordare i Dati</h2>
+        <p class="slide-subtitle">Un programma per fare calcoli deve poter memorizzare delle informazioni: l'età di una persona, il punteggio di un gioco, il prezzo di un prodotto.</p>
+
+        <div class="analogy-box">
+          <div class="analogy-title">📦 L'Analogia delle Scatole Etichettate</div>
+          <div class="analogy-text">Pensa a una variabile come a una <strong>scatola nella memoria</strong> del computer. Ogni scatola ha:
+          <br>1. Un'<strong>etichetta</strong> (il nome che scegli tu, es. <code>eta</code> o <code>punteggio</code>).
+          <br>2. Un <strong>tipo</strong> (stabilisce cosa può contenere: numeri interi, con la virgola o lettere).
+          <br>3. Un <strong>contenuto</strong> (il valore salvato dentro in quel momento, che può variare).</div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>Numeri Interi: int</h3>
+            <p>Per contare oggetti interi senza decimali (es. persone, monete, anni).</p>
+            <div class="code-container">
+              <pre><code><span class="syn-type">int</span> eta = <span class="syn-num">25</span>;
+<span class="syn-type">int</span> vite = <span class="syn-num">3</span>;</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Numeri con Virgola: double</h3>
+            <p>Per misurazioni precise e frazionarie (prezzi, temperature, altezze).</p>
+            <div class="code-container">
+              <pre><code><span class="syn-type">double</span> prezzo = <span class="syn-num">19.99</span>;
+<span class="syn-type">double</span> temperatura = <span class="syn-num">36.5</span>;</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Singoli Caratteri: char</h3>
+            <p>Per contenere una singola lettera, simbolo o cifra tra apici singoli <code>' '</code>.</p>
+            <div class="code-container">
+              <pre><code><span class="syn-type">char</span> iniziale = <span class="syn-str">'M'</span>;
+<span class="syn-type">char</span> voto = <span class="syn-str">'A'</span>;</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Variabili e Tipi di Dato nel Linguaggio C
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=Sn1M5sKXe1s" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 04. Le Variabili in C &nearr;</a>
+            <a href="https://www.youtube.com/watch?v=PIdJotlRYGg" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 06. I Tipi di Dato (Data Types) &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Booleani e Regole delle Variabili -->
+      <section class="slide" id="slide-5" data-lesson="2" data-title="Lezione 2: Vero/Falso e Regole">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 02 &bull; Slide 2/4</span>
+          <span class="topic-badge">Tipi e Regole</span>
+        </div>
+        <h2 class="slide-title">Vero o Falso (bool) e Come Nominare le Variabili</h2>
+        <p class="slide-subtitle">Molto spesso i computer devono ricordare risposte a domande del tipo: "La porta è aperta? L'utente ha pagato? Il gioco è terminato?".</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Il Tipo Booleano: bool</h3>
+            <p>Include la libreria <code>&lt;stdbool.h&gt;</code> per usare le parole chiare <code>true</code> (vero) e <code>false</code> (falso):</p>
+            <div class="code-container">
+              <pre><code><span class="syn-dir">#include</span> <span class="syn-str">&lt;stdbool.h&gt;</span>
+
+<span class="syn-type">bool</span> gioco_attivo = <span class="syn-kw">true</span>;
+<span class="syn-type">bool</span> partita_vinta = <span class="syn-kw">false</span>;</code></pre>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Per il computer internamente <code>false</code> vale <code>0</code> e <code>true</code> vale <code>1</code>.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Regole d'Oro per i Nomi delle Variabili</h3>
+            <ul class="feature-list">
+              <li>Usa <strong>nomi chiari</strong>: preferisci <code>punteggio</code> a <code>p</code>, così chi legge il codice capisce subito a cosa serve.</li>
+              <li>I nomi possono contenere lettere, numeri e trattini bassi <code>_</code> (es. <code>giorni_lavorativi</code>).</li>
+              <li><strong>Non possono</strong> iniziare con un numero e non possono contenere spazi né accenti.</li>
+              <li>Il C è <strong>case sensitive</strong>: <code>eta</code> e <code>Eta</code> sono due scatole completamente diverse!</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6 (Slide 8 del corso): Tabella e Prontuario dei Tipi di Dato -->
+      <section class="slide" id="slide-6" data-lesson="2" data-title="Lezione 2: Tipi di Dato in Memoria">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 02 &bull; Slide 3/4</span>
+          <span class="topic-badge">I Tipi in Memoria</span>
+        </div>
+        <h2 class="slide-title">I Tipi di Dato in Memoria: Tabella e Prontuario</h2>
+        <p class="slide-subtitle">Ogni tipo occupa una quantità precisa di byte in memoria RAM. Ecco la tabella dei tipi più usati e il menù completo per esplorare tutti i tipi del C.</p>
+
+        <!-- 1. Tabella riassuntiva dei tipi più usati -->
+        <div class="card" style="margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1.05rem; margin-bottom: 0.6rem;">
+            <span>📊</span> I Tipi Più Usati nel Linguaggio C e i Loro Formati di Stampa (printf)
+          </h3>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+              <thead>
+                <tr style="background: var(--bg-card-hover); border-bottom: 2px solid var(--accent); color: var(--accent);">
+                  <th style="padding: 0.6rem 0.8rem; white-space: nowrap;">Tipo</th>
+                  <th style="padding: 0.6rem 0.8rem; white-space: nowrap;">Formati printf</th>
+                  <th style="padding: 0.6rem 0.8rem; white-space: nowrap;">Spazio in RAM</th>
+                  <th style="padding: 0.6rem 0.8rem; white-space: nowrap;">Range di Valori</th>
+                  <th style="padding: 0.6rem 0.8rem;">Breve Descrizione & Utilizzo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.55rem 0.8rem; font-family: var(--font-mono); font-weight: bold; color: #38bdf8; white-space: nowrap;">char</td>
+                  <td style="padding: 0.55rem 0.8rem; white-space: nowrap;">
+                    <code style="background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-color); color: #fbbf24; font-weight: 700;">%c</code> <span style="font-size: 0.78rem; color: var(--text-muted);">(carattere)</span><br>
+                    <code style="background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-color); color: #fbbf24; font-weight: 700;">%d</code> <span style="font-size: 0.78rem; color: var(--text-muted);">(codice ASCII)</span>
+                  </td>
+                  <td style="padding: 0.55rem 0.8rem; white-space: nowrap;">1 Byte (8 bit)</td>
+                  <td style="padding: 0.55rem 0.8rem; font-family: var(--font-mono); white-space: nowrap;">-128 .. +127 <span style="color: var(--text-muted); font-size: 0.78rem;">(0..255 unsigned)</span></td>
+                  <td style="padding: 0.55rem 0.8rem;">Singolo carattere tra apici (es. <code>'A'</code>, <code>'z'</code>) o numeri interi minuscoli.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.55rem 0.8rem; font-family: var(--font-mono); font-weight: bold; color: #38bdf8; white-space: nowrap;">int</td>
+                  <td style="padding: 0.55rem 0.8rem; white-space: nowrap;">
+                    <code style="background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-color); color: #fbbf24; font-weight: 700;">%d</code> <span style="font-size: 0.78rem; color: var(--text-muted);">(o %i decimale)</span><br>
+                    <code style="background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-color); color: #fbbf24; font-weight: 700;">%u</code> <span style="font-size: 0.78rem; color: var(--text-muted);">(unsigned solo pos.)</span>
+                  </td>
+                  <td style="padding: 0.55rem 0.8rem; white-space: nowrap;">4 Byte (32 bit)</td>
+                  <td style="padding: 0.55rem 0.8rem; font-family: var(--font-mono); white-space: nowrap;">-2.147.483.648 .. +2.147.483.647</td>
+                  <td style="padding: 0.55rem 0.8rem;">Tipo intero standard per eccellenza (età, contatori, indici, punteggi).</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.55rem 0.8rem; font-family: var(--font-mono); font-weight: bold; color: #38bdf8; white-space: nowrap;">float</td>
+                  <td style="padding: 0.55rem 0.8rem; white-space: nowrap;">
+                    <code style="background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-color); color: #fbbf24; font-weight: 700;">%f</code> <span style="font-size: 0.78rem; color: var(--text-muted);">(virgola mobile)</span><br>
+                    <code style="background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-color); color: #fbbf24; font-weight: 700;">%.2f</code> <span style="font-size: 0.78rem; color: var(--text-muted);">(con 2 decimali)</span>
+                  </td>
+                  <td style="padding: 0.55rem 0.8rem; white-space: nowrap;">4 Byte (32 bit)</td>
+                  <td style="padding: 0.55rem 0.8rem; font-family: var(--font-mono); white-space: nowrap;">&plusmn;1.2 &times; 10<sup>-38</sup> .. &plusmn;3.4 &times; 10<sup>+38</sup></td>
+                  <td style="padding: 0.55rem 0.8rem;">Numeri con la virgola decimale (es. prezzi, misurazioni, medie).</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.55rem 0.8rem; font-family: var(--font-mono); font-weight: bold; color: #38bdf8; white-space: nowrap;">bool</td>
+                  <td style="padding: 0.55rem 0.8rem; white-space: nowrap;">
+                    <code style="background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-color); color: #fbbf24; font-weight: 700;">%d</code> <span style="font-size: 0.78rem; color: var(--text-muted);">(stampa 1 o 0)</span>
+                  </td>
+                  <td style="padding: 0.55rem 0.8rem; white-space: nowrap;">1 Byte (8 bit)</td>
+                  <td style="padding: 0.55rem 0.8rem; font-family: var(--font-mono); white-space: nowrap;">true (1) oppure false (0)</td>
+                  <td style="padding: 0.55rem 0.8rem;">Valori logici binari (vero/falso) tramite la libreria <code>&lt;stdbool.h&gt;</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. Menù a tendina con la lista completa di tutti i tipi C -->
+        <div class="card" style="margin-bottom: 1.25rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <h3 style="margin: 0; font-size: 1.05rem;">
+              <span>📑</span> Prontuario Completo: Tutti i Tipi del Linguaggio C
+            </h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Scegli un tipo dal menù a tendina per i dettagli:</span>
+          </div>
+
+          <div style="margin-bottom: 0.75rem;">
+            <select id="allTypesSelect" onchange="updateTypeInfo(this.value)" style="width: 100%; padding: 0.6rem 0.8rem; background: var(--code-bg); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; font-family: var(--font-mono); font-size: 0.92rem; cursor: pointer;">
+              <optgroup label="Tipi Interi Base">
+                <option value="char">char (carattere o intero 8 bit)</option>
+                <option value="signed_char">signed char (con segno -128..127)</option>
+                <option value="unsigned_char">unsigned char (senza segno 0..255)</option>
+                <option value="short">short / short int (intero a 16 bit)</option>
+                <option value="unsigned_short">unsigned short (16 bit positivo 0..65535)</option>
+                <option value="int" selected>int / signed int (intero standard 32 bit)</option>
+                <option value="unsigned_int">unsigned int (32 bit solo positivo 0..4.29Mld)</option>
+                <option value="long">long / long int (intero esteso 32/64 bit)</option>
+                <option value="unsigned_long">unsigned long (esteso solo positivo)</option>
+                <option value="long_long">long long int (garantito almeno 64 bit)</option>
+                <option value="unsigned_long_long">unsigned long long (64 bit positivo gigante)</option>
+              </optgroup>
+              <optgroup label="Tipi Decimali (Virgola Mobile)">
+                <option value="float">float (virgola mobile singola precisione)</option>
+                <option value="double">double (virgola mobile doppia precisione)</option>
+                <option value="long_double">long double (precisione estesa 80/128 bit)</option>
+              </optgroup>
+              <optgroup label="Booleani e Tipi di Sistema">
+                <option value="bool">bool (valore logico true / false con &lt;stdbool.h&gt;)</option>
+                <option value="void">void (tipo vuoto / nessun valore)</option>
+                <option value="size_t">size_t (tipo intero positivo per dimensioni restituito da sizeof)</option>
+              </optgroup>
+              <optgroup label="Tipi a Dimensione Esatta (&lt;stdint.h&gt;)">
+                <option value="int8_t">int8_t (esattamente 8 bit con segno: -128..127)</option>
+                <option value="uint8_t">uint8_t (esattamente 8 bit senza segno: 0..255)</option>
+                <option value="int16_t">int16_t (esattamente 16 bit: -32768..32767)</option>
+                <option value="uint16_t">uint16_t (esattamente 16 bit senza segno: 0..65535)</option>
+                <option value="int32_t">int32_t (esattamente 32 bit: -2.14Mld..+2.14Mld)</option>
+                <option value="uint32_t">uint32_t (esattamente 32 bit senza segno: 0..4.29Mld)</option>
+                <option value="int64_t">int64_t (esattamente 64 bit: fino a &plusmn;9 trilioni)</option>
+                <option value="uint64_t">uint64_t (esattamente 64 bit senza segno: fino a 18 trilioni)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- Scheda dettaglio che si aggiorna istantaneamente -->
+          <div id="typeDetailCard" style="background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; font-size: 0.9rem; line-height: 1.6;">
+            <!-- Popolato dinamicamente da JS -->
+          </div>
+        </div>
+
+        <!-- Box approfondimento sizeof con link (spostato nella parte bassa della slide) -->
+        <div class="analogy-box" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.5rem;">
+          <div>
+            <div class="analogy-title">⚖ Approfondimento: Misurare lo Spazio in RAM con l'Operatore sizeof</div>
+            <div class="analogy-text">In C puoi chiedere direttamente al computer quanti byte occupa qualsiasi variabile, tipo o array tramite l'operatore speciale <code>sizeof</code>.</div>
+          </div>
+          <button class="btn btn-primary" onclick="goToSlide(42)" style="font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+            Approfondimento su sizeof &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 2: Quiz di Verifica -->
+      <section class="slide" id="slide-quiz-2" data-lesson="2" data-title="Lezione 2: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 02 &bull; Slide 4/4</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 2</h2>
+        <p class="slide-subtitle">Verifica quanto hai appreso sulle variabili, i tipi numerici e le regole per nominare le scatole di memoria in C.</p>
+
+        <!-- Domanda 2.1 -->
+        <div class="quiz-box" id="quiz-2">
+          <div class="quiz-question">Domanda 1: Se vuoi memorizzare il prezzo di una pizza (es. 7.50 €), quale tipo di dato è più appropriato?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('2', 0, false)">A) int (perché serve solo per i numeri interi)</button>
+            <button class="quiz-btn" onclick="checkQuiz('2', 1, false)">B) char (perché contiene lettere)</button>
+            <button class="quiz-btn" onclick="checkQuiz('2', 2, true)">C) float (perché può rappresentare numeri con la virgola decimale)</button>
+            <button class="quiz-btn" onclick="checkQuiz('2', 3, false)">D) bool (perché o compri la pizza o non la compri)</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-2-fb"></div>
+        </div>
+
+        <!-- Domanda 2.2 -->
+        <div class="quiz-box" id="quiz-2b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: Secondo le regole del linguaggio C, quale dei seguenti è un nome di variabile VALIDO?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('2b', 0, false)">A) 2giorni (inizia con un numero)</button>
+            <button class="quiz-btn" onclick="checkQuiz('2b', 1, true)">B) punteggio_totale (lettere e trattino basso _)</button>
+            <button class="quiz-btn" onclick="checkQuiz('2b', 2, false)">C) prezzo pizza (contiene uno spazio vuoto)</button>
+            <button class="quiz-btn" onclick="checkQuiz('2b', 3, false)">D) totale€ (contiene il simbolo speciale dell'euro)</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-2b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 3: OPERATORI & DIALOGO CON L'UTENTE
+           ============================================== -->
+      <!-- Slide 7: Fare Calcoli con gli Operatori -->
+      <section class="slide" id="slide-7" data-lesson="3" data-title="Lezione 3: Fare Calcoli (Operatori)">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 03 &bull; Slide 1/4</span>
+          <span class="topic-badge">Aritmetica & Logica</span>
+        </div>
+        <h2 class="slide-title">Operatori: Ordinare al Computer di Fare Calcoli</h2>
+        <p class="slide-subtitle">Il computer eccelle nell'aritmetica. Possiamo combinare variabili e numeri con i simboli che già conosci dalla matematica.</p>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>I Calcoli Base</h3>
+            <ul class="feature-list">
+              <li><code>+</code> Somma (es. <code>5 + 3</code> dà <code>8</code>)</li>
+              <li><code>-</code> Sottrazione (es. <code>10 - 4</code> dà <code>6</code>)</li>
+              <li><code>*</code> Moltiplicazione (es. <code>3 * 4</code> dà <code>12</code>)</li>
+              <li><code>/</code> Divisione (es. <code>10 / 2</code> dà <code>5</code>)</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Il Resto: Modulo %</h3>
+            <p>L'operatore <code>%</code> calcola il <strong>resto</strong> della divisione tra numeri interi:</p>
+            <div class="code-container">
+              <pre><code><span class="syn-com">// 7 diviso 3 fa 2 con resto 1:</span>
+<span class="syn-type">int</span> resto = <span class="syn-num">7</span> % <span class="syn-num">3</span>; <span class="syn-com">// resto vale 1</span>
+
+<span class="syn-com">// Trucco: se n % 2 è 0, </span>
+<span class="syn-com">// il numero è PARI!</span></code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Scorciatoie Comode</h3>
+            <p>Aumentare o diminuire un contatore di 1 è un'operazione frequentissima:</p>
+            <div class="code-container">
+              <pre><code><span class="syn-type">int</span> vite = <span class="syn-num">3</span>;
+vite++;  <span class="syn-com">// vite diventa 4</span>
+vite--;  <span class="syn-com">// vite torna a 3</span>
+
+vite += <span class="syn-num">5</span>; <span class="syn-com">// aggiunge 5 (vite = vite + 5)</span></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Approfondimento: L'Operatore di Assegnazione (=) -->
+        <div class="analogy-box" style="margin-top: 1.25rem;">
+          <div class="analogy-title">📥 L'Operazione di Assegnazione (=) e le Assegnazioni Composte</div>
+          <div class="analogy-text">
+            In C, il simbolo <code>=</code> è l'<strong>operatore di assegnazione</strong> e agisce sempre da <strong>destra verso sinistra</strong>: 
+            <code>variabile = valore;</code> calcola l'espressione a destra e la ripone nella scatola a sinistra.
+            Le forme come <code>+=</code>, <code>-=</code>, <code>*=</code> sono <em>assegnazioni composte</em>: ad esempio <code>vite += 5;</code> è la comoda scorciatoia per <code>vite = vite + 5;</code> (legge il valore attuale di <code>vite</code>, somma 5 e salva il nuovo risultato nella stessa variabile).
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Operatori Aritmetici e Lavorare con i Numeri in C
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=xVOKZS8XIaY" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 08. Calcoli e Operatori coi Numeri &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Parlare con l'Utente (printf e scanf) -->
+      <section class="slide" id="slide-8" data-lesson="3" data-title="Lezione 3: Dialogare con l'Utente (printf, scanf)">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 03 &bull; Slide 2/4</span>
+          <span class="topic-badge">Input e Output</span>
+        </div>
+        <h2 class="slide-title">Dialogare con l'Utente: Scrivere e Leggere</h2>
+        <p class="slide-subtitle">Un programma interattivo deve poter <strong>mostrare messaggi</strong> sullo schermo e <strong>ascoltare</strong> ciò che l'utente digita dalla tastiera.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header"><span>Esempio Completo di Input / Output</span></div>
+              <pre><code><span class="syn-dir">#include</span> <span class="syn-str">&lt;stdio.h&gt;</span>
+
+<span class="syn-type">int</span> <span class="syn-fn">main</span>(<span class="syn-type">void</span>) {
+    <span class="syn-type">int</span> anni;
+
+    <span class="syn-com">// 1. Chiediamo all'utente di scrivere</span>
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Quanti anni hai? "</span>);
+
+    <span class="syn-com">// 2. Leggiamo il numero dalla tastiera</span>
+    <span class="syn-fn">scanf</span>(<span class="syn-str">"%d"</span>, &anni);
+
+    <span class="syn-com">// 3. Mostriamo la risposta personalizzata</span>
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Hai %d anni! Nel 2030 ne avrai %d.\n"</span>, 
+           anni, anni + <span class="syn-num">4</span>);
+
+    <span class="syn-kw">return</span> <span class="syn-num">0</span>;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>I Simboli Segnaposto (%) e la & commerciale</h3>
+            <ul class="feature-list">
+              <li><strong><code>%d</code>:</strong> segnaposto per un numero intero (digit).</li>
+              <li><strong><code>%.2f</code>:</strong> segnaposto per un decimale (mostra 2 cifre dopo la virgola).</li>
+              <li><strong><code>%c</code>:</strong> segnaposto per un singolo carattere.</li>
+              <li><strong><code>&amp;nome_variabile</code>:</strong> operatore di indirizzo obbligatorio con <code>scanf</code> per indicare la posizione esatta in memoria.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Approfondimento scanf nella parte bassa della slide -->
+        <div class="analogy-box" style="margin-top: 1.25rem;">
+          <div class="analogy-title">📬 Approfondimento: Perché la & commerciale in scanf?</div>
+          <div class="analogy-text">Pensa alla <code>&</code> come al <strong>numero civico</strong> della scatola in memoria. Quando dici a <code>scanf</code> di salvare il dato digitato, devi dargli l'indirizzo esatto (<code>&anni</code>) dove andare fisicamente a posare quel valore!</div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Input e Output da Console (<code>printf</code> e <code>scanf</code>)
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=smvbjIdB-mw" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 24. Console Input e Output in C &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 9: Laboratorio Formattazione -->
+      <section class="slide" id="slide-9" data-lesson="3" data-title="Lezione 3: Laboratorio di Formattazione">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 03 &bull; Slide 3/4</span>
+          <span class="topic-badge">Laboratorio Interattivo</span>
+        </div>
+        <h2 class="slide-title">Laboratorio: Come printf formatta i numeri</h2>
+
+        <div class="interactive-box">
+          <div class="interactive-header">
+            <span>⚙ Prova Tu Stesso: Formatta un numero decimale</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">Scegli un valore decimale e quante cifre mostrare dopo la virgola con <code>%.Nf</code>:</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.5rem;">
+            <div>
+              <label style="font-size: 0.82rem; color: var(--text-muted);">Numero inserito:</label>
+              <input type="number" id="io-val" value="45.6789" step="0.001" style="width: 100%; padding: 0.45rem; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px;">
+            </div>
+            <div>
+              <label style="font-size: 0.82rem; color: var(--text-muted);">Decimali da visualizzare:</label>
+              <input type="number" id="io-prec" value="2" min="0" max="4" style="width: 100%; padding: 0.45rem; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px;">
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-top: 0.75rem;" onclick="testPrintf()">Genera Output a Schermo</button>
+          <div class="interactive-terminal" id="io-output">
+Istruzione C: printf("%.2f\n", 45.6789);  -->  Output: 45.68
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 3: Quiz di Verifica -->
+      <section class="slide" id="slide-quiz-3" data-lesson="3" data-title="Lezione 3: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 03 &bull; Slide 4/4</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 3</h2>
+        <p class="slide-subtitle">Due domande di verifica sui calcoli aritmetici con gli operatori e sull'interazione con l'utente tramite printf e scanf.</p>
+
+        <!-- Domanda 3.1 -->
+        <div class="quiz-box" id="quiz-3">
+          <div class="quiz-question">Domanda 1: Nell'istruzione <code>printf("Punteggio: %d\n", punti);</code> a cosa serve il simbolo <code>%d</code>?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('3', 0, false)">A) A calcolare la percentuale del punteggio</button>
+            <button class="quiz-btn" onclick="checkQuiz('3', 1, true)">B) È un segnaposto che dice al computer: "Sostituisci questo punto con il numero intero contenuto nella variabile 'punti'"</button>
+            <button class="quiz-btn" onclick="checkQuiz('3', 2, false)">C) A chiudere il programma</button>
+            <button class="quiz-btn" onclick="checkQuiz('3', 3, false)">D) A cancellare la riga precedente</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-3-fb"></div>
+        </div>
+
+        <!-- Domanda 3.2 con codice C -->
+        <div class="quiz-box" id="quiz-3b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: Osserva attentamente il seguente calcolo tra numeri interi in C:</div>
+          <div class="code-container" style="margin: 0.75rem 0;">
+            <pre><code><span class="syn-type">int</span> risultato = <span class="syn-num">7</span> / <span class="syn-num">2</span>;
+<span class="syn-fn">printf</span>(<span class="syn-str">"%d"</span>, risultato);</code></pre>
+          </div>
+          <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.75rem;">In base a quanto appreso sugli operatori aritmetici, quale valore verrà stampato sullo schermo?</p>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('3b', 0, false)">A) 3.5 (mostrando la parte decimale)</button>
+            <button class="quiz-btn" onclick="checkQuiz('3b', 1, true)">B) 3 (perché nella divisione tra interi il C scarta i decimali e tiene solo la parte intera)</button>
+            <button class="quiz-btn" onclick="checkQuiz('3b', 2, false)">C) 4 (arrotondato per eccesso al numero intero più vicino)</button>
+            <button class="quiz-btn" onclick="checkQuiz('3b', 3, false)">D) Un messaggio di errore del compilatore</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-3b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 4: PRENDERE DECISIONI
+           ============================================== -->
+      <!-- Slide 10: if, else -->
+      <section class="slide" id="slide-10" data-lesson="4" data-title="Lezione 4: Prendere Decisioni (if ed else)">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 04 &bull; Slide 1/4</span>
+          <span class="topic-badge">Controllo del Flusso</span>
+        </div>
+        <h2 class="slide-title">Prendere Decisioni: Istruzioni Condizionali</h2>
+        <p class="slide-subtitle">Nella vita prendiamo continuamente decisioni: <em>"SE piove prendo l'ombrello, ALTRIMENTI metto gli occhiali da sole"</em>. I programmi fanno esattamente la stessa cosa.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Il Comando if ed else</h3>
+            <div class="code-container">
+              <pre><code><span class="syn-type">int</span> eta = <span class="syn-num">16</span>;
+
+<span class="syn-kw">if</span> (eta &gt;= <span class="syn-num">18</span>) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Puoi prendere la patente auto!\n"</span>);
+} <span class="syn-kw">else</span> {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Devi ancora aspettare la maggiore età.\n"</span>);
+}</code></pre>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Il blocco tra parentesi graffe <code>{ ... }</code> viene eseguito solo se la condizione tra parentesi tonde risulta <strong>vera</strong>.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+            <div class="card" style="margin: 0; padding: 1.15rem 1.25rem;">
+              <h3 style="font-size: 1.05rem; margin-bottom: 0.5rem;"><span>⚖️</span> Operatori di Confronto</h3>
+              <ul class="feature-list" style="margin-bottom: 0;">
+                <li style="margin-bottom: 0.45rem;"><code>==</code> <strong>Uguale a:</strong> verifica se due valori sono identici (usa il doppio uguale per non confonderlo con l'assegnazione!).</li>
+                <li style="margin-bottom: 0.45rem;"><code>!=</code> <strong>Diverso da:</strong> vero se i valori sono differenti.</li>
+                <li style="margin-bottom: 0.45rem;"><code>&gt;</code> e <code>&gt;=</code> <strong>Maggiore</strong> e <strong>Maggiore o uguale</strong></li>
+                <li style="margin-bottom: 0;"><code>&lt;</code> e <code>&lt;=</code> <strong>Minore</strong> e <strong>Minore o uguale</strong></li>
+              </ul>
+            </div>
+
+            <div class="card" style="margin: 0; padding: 1.15rem 1.25rem;">
+              <h3 style="font-size: 1.05rem; margin-bottom: 0.5rem;"><span>🔗</span> Connettivi Logici</h3>
+              <ul class="feature-list" style="margin-bottom: 0;">
+                <li style="margin-bottom: 0.45rem;"><code>&amp;&amp;</code> <strong>AND (E contemporaneamente):</strong> entrambe le condizioni devono risultare vere (es. <code>eta &gt;= 18 &amp;&amp; ha_patente</code>).</li>
+                <li style="margin-bottom: 0.45rem;"><code>||</code> <strong>OR (OPPURE):</strong> basta che almeno una delle condizioni sia vera (es. <code>giorno == 6 || giorno == 7</code>).</li>
+                <li style="margin-bottom: 0;"><code>!</code> <strong>NOT (Negazione logica):</strong> inverte la condizione, trasformando il vero in falso e viceversa (es. <code>!piove</code>).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Approfondimento nella parte bassa: L'Operazione di Assegnazione (=) vs Confronto (==) -->
+        <div class="card" style="margin-top: 1.25rem; border-left: 4px solid var(--accent);">
+          <h3 style="color: var(--accent); margin-bottom: 0.6rem;">
+            <span>✍️</span> L'Operazione di Assegnazione (<code>=</code>) e la Differenza con l'Uguaglianza (<code>==</code>)
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            Nel linguaggio C il simbolo <code>=</code> non indica un'uguaglianza matematica, ma è l'<strong>operazione di assegnazione</strong>: ordina al computer di memorizzare un nuovo valore dentro una variabile.
+          </p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="background: var(--code-bg); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: var(--accent); font-size: 0.9rem; margin-bottom: 0.35rem;">
+                📥 Assegnazione: <code>=</code> (Un solo uguale)
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                È un'<strong>azione di scrittura</strong> (da destra verso sinistra). Calcola il valore a destra e lo versa nella scatola a sinistra:
+              </p>
+              <div class="code-container" style="margin: 0;">
+                <pre><code><span class="syn-type">int</span> punti = <span class="syn-num">10</span>;     <span class="syn-com">// Scrive 10 dentro 'punti'</span>
+punti = punti + <span class="syn-num">5</span>;  <span class="syn-com">// Ora 'punti' diventa 15</span></code></pre>
+              </div>
+            </div>
+
+            <div style="background: var(--code-bg); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 700; color: var(--tip-color); font-size: 0.9rem; margin-bottom: 0.35rem;">
+                🔍 Confronto: <code>==</code> (Doppio uguale)
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                È una <strong>domanda di verifica</strong>. Non altera la variabile, chiede solo: <em>"Il valore a sinistra è identico a quello a destra?"</em>:
+              </p>
+              <div class="code-container" style="margin: 0;">
+                <pre><code><span class="syn-kw">if</span> (punti == <span class="syn-num">15</span>) {  <span class="syn-com">// Punti vale 15? Sì!</span>
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Hai vinto!\n"</span>);
+}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="analogy-box" style="margin-top: 0.85rem; margin-bottom: 0; background: rgba(239, 68, 68, 0.1); border-left-color: var(--danger);">
+            <div class="analogy-title" style="color: var(--danger);">⚠️ Attenzione al Trabocchetto Più Comune in C!</div>
+            <div class="analogy-text">
+              Se scrivi <code>if (punti = 15)</code> con <strong>un solo uguale</strong>, non stai controllando se <code>punti</code> vale 15: stai <strong>assegnando</strong> 15 a <code>punti</code>! Poiché 15 è diverso da 0, per il C il test risulterà sempre <strong>vero</strong>, producendo un errore logico invisibile. Ricorda la regola d'oro: <strong>un uguale assegna, due uguali confrontano!</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Condizioni <code>if/else</code>, Confronto e Connettivi Logici
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=rqaBeRneHng" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 11. Condizioni IF / ELSE &nearr;</a>
+            <a href="https://www.youtube.com/watch?v=K1iRUsDCSVk" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 09. Operatori di Confronto &nearr;</a>
+            <a href="https://www.youtube.com/watch?v=GO6uAhHO8FY" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 10. Connettivi Logici &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 11: La Scelta Multipla (switch) -->
+      <section class="slide" id="slide-11" data-lesson="4" data-title="Lezione 4: Il Menu a Scelta (switch)">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 04 &bull; Slide 2/4</span>
+          <span class="topic-badge">Scelta Multipla</span>
+        </div>
+        <h2 class="slide-title">Scegliere tra Tante Opzioni: <code>switch</code></h2>
+        <p class="slide-subtitle">Quando devi scegliere tra molte opzioni numeriche fisse (come un menu di un videogioco o i tasti di un ascensore), <code>switch</code> rende il codice ordinato e leggibile.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header"><span>Menu con switch</span></div>
+              <pre><code><span class="syn-type">int</span> scelta = <span class="syn-num">2</span>;
+
+<span class="syn-kw">switch</span> (scelta) {
+    <span class="syn-kw">case</span> <span class="syn-num">1</span>:
+        <span class="syn-fn">printf</span>(<span class="syn-str">"Avvio Nuova Partita...\n"</span>);
+        <span class="syn-kw">break</span>; <span class="syn-com">// Esce dal menu</span>
+
+    <span class="syn-kw">case</span> <span class="syn-num">2</span>:
+        <span class="syn-fn">printf</span>(<span class="syn-str">"Caricamento Salvataggio...\n"</span>);
+        <span class="syn-kw">break</span>;
+
+    <span class="syn-kw">case</span> <span class="syn-num">3</span>:
+        <span class="syn-fn">printf</span>(<span class="syn-str">"Uscita dal gioco.\n"</span>);
+        <span class="syn-kw">break</span>;
+
+    <span class="syn-kw">default</span>:
+        <span class="syn-fn">printf</span>(<span class="syn-str">"Tasto non riconosciuto!\n"</span>);
+        <span class="syn-kw">break</span>;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Perché il comando break è Fondamentale?</h3>
+            <p>Il comando <code>break;</code> ordina al computer: <em>"Hai eseguito questo caso? Bene, adesso esci immediatamente dal menu!"</em>.</p>
+            <p style="margin-top: 0.6rem;">Se dimentichi il <code>break;</code>, il computer continuerà a eseguire a cascata anche le istruzioni del caso sottostante!</p>
+            <p style="margin-top: 0.6rem;"><strong><code>default:</code></strong> interviene se l'utente digita un numero che non corrisponde a nessuno dei casi previsti (come premere il tasto 9 in un ascensore di 4 piani).</p>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> La Scelta Multipla con <code>switch</code>
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=5b783hVsnd0" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 13. Il Costrutto Switch in C &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 12: Simulatore Decisioni -->
+      <section class="slide" id="slide-12" data-lesson="4" data-title="Lezione 4: Laboratorio Biglietto Cinema">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 04 &bull; Slide 3/4</span>
+          <span class="topic-badge">Laboratorio Interattivo</span>
+        </div>
+        <h2 class="slide-title">Laboratorio: Calcolatore di Biglietto del Cinema</h2>
+        <p class="slide-subtitle">Osserva come le istruzioni <code>if / else if / else</code> guidano il flusso del programma in base all'età inserita.</p>
+
+        <div class="grid-2">
+          <!-- Colonna Sinistra: Codice C in esecuzione -->
+          <div>
+            <div class="code-container" style="margin-top: 0;">
+              <div class="code-header">
+                <span>📄 Codice C Eseguito dal Computer</span>
+                <span style="color: var(--accent); font-weight: 600;">biglietto.c</span>
+              </div>
+              <pre><code style="padding: 0.85rem; font-size: 0.88rem;"><span class="syn-type">int</span> eta = <span id="code-eta-val" class="syn-num" style="font-weight: bold; background: rgba(56, 189, 248, 0.25); padding: 1px 6px; border-radius: 4px;">22</span>;
+
+<span id="branch-child" class="code-branch"><span class="syn-kw">if</span> (eta &lt; <span class="syn-num">6</span>) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Gratuito (0 &euro;)\n"</span>);
+}</span><span id="branch-teen" class="code-branch"><span class="syn-kw">else if</span> (eta &lt; <span class="syn-num">18</span>) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Ragazzi (5 &euro;)\n"</span>);
+}</span><span id="branch-adult" class="code-branch active"><span class="syn-kw">else if</span> (eta &lt; <span class="syn-num">65</span>) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Standard (10 &euro;)\n"</span>);
+}</span><span id="branch-senior" class="code-branch"><span class="syn-kw">else</span> {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Senior (6 &euro;)\n"</span>);
+}</span></code></pre>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+              💡 <em>Il ramo colorato in azzurro evidenzia l'istruzione che il processore esegue per l'età selezionata.</em>
+            </p>
+          </div>
+
+          <!-- Colonna Destra: Simulatore Interattivo -->
+          <div class="interactive-box" style="margin-top: 0;">
+            <div class="interactive-header">
+              <span>🎟 Simulatore di Decisioni Logiche</span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Imposta l'età o usa i tasti rapidi per testare i vari rami:</p>
+            
+            <div style="display: flex; gap: 0.6rem; align-items: center; margin-top: 0.6rem; flex-wrap: wrap;">
+              <label style="font-size: 0.88rem; color: var(--text-muted);">Età spettatore:</label>
+              <input type="number" id="sim-age" value="22" min="1" max="110" oninput="evalAgeDiscount()" style="padding: 0.45rem; width: 75px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; font-weight: bold; font-size: 0.95rem;">
+              <button class="btn btn-primary" onclick="evalAgeDiscount()">Valuta Condizione</button>
+            </div>
+
+            <div style="display: flex; gap: 0.4rem; margin-top: 0.6rem; flex-wrap: wrap;">
+              <button class="btn" style="font-size: 0.78rem; padding: 0.25rem 0.5rem;" onclick="setAge(4)">👶 4 anni</button>
+              <button class="btn" style="font-size: 0.78rem; padding: 0.25rem 0.5rem;" onclick="setAge(14)">🎒 14 anni</button>
+              <button class="btn" style="font-size: 0.78rem; padding: 0.25rem 0.5rem;" onclick="setAge(30)">🧑 30 anni</button>
+              <button class="btn" style="font-size: 0.78rem; padding: 0.25rem 0.5rem;" onclick="setAge(72)">👴 72 anni</button>
+            </div>
+
+            <div class="interactive-terminal" id="age-output" style="margin-top: 0.75rem;">
+Età analizzata: 22 anni
+Ramo eseguito:  else if (età &lt; 65) -> Adulti
+Prezzo finale:  Biglietto Standard (10 €)
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 4: Quiz di Verifica -->
+      <section class="slide" id="slide-quiz-4" data-lesson="4" data-title="Lezione 4: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 04 &bull; Slide 4/4</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 4</h2>
+        <p class="slide-subtitle">Due domande di verifica sulle condizioni logiche, il confronto tra valori e il controllo del flusso con if ed switch.</p>
+
+        <!-- Domanda 4.1 -->
+        <div class="quiz-box" id="quiz-4">
+          <div class="quiz-question">Domanda 1: In C, quale simbolo si usa per verificare se il valore di una variabile 'a' è uguale a 10?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('4', 0, false)">A) a = 10 (un solo uguale)</button>
+            <button class="quiz-btn" onclick="checkQuiz('4', 1, true)">B) a == 10 (doppio uguale per il confronto logico)</button>
+            <button class="quiz-btn" onclick="checkQuiz('4', 2, false)">C) a is 10</button>
+            <button class="quiz-btn" onclick="checkQuiz('4', 3, false)">D) a != 10</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-4-fb"></div>
+        </div>
+
+        <!-- Domanda 4.2 -->
+        <div class="quiz-box" id="quiz-4b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: All'interno di una struttura <code>switch</code>, qual è lo scopo fondamentale del comando <code>break;</code> al termine di ciascun caso?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('4b', 0, false)">A) Spegnere temporaneamente lo schermo del computer</button>
+            <button class="quiz-btn" onclick="checkQuiz('4b', 1, true)">B) Terminare l'esecuzione del blocco switch ed uscire immediatamente, evitando di eseguire a cascata i casi successivi</button>
+            <button class="quiz-btn" onclick="checkQuiz('4b', 2, false)">C) Riavviare il programma dalla funzione main</button>
+            <button class="quiz-btn" onclick="checkQuiz('4b', 3, false)">D) Azzerare il valore della variabile di scelta</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-4b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 5: RIPETERE LE AZIONI (I CICLI)
+           ============================================== -->
+      <!-- Slide 13: Il Ciclo while -->
+      <section class="slide" id="slide-13" data-lesson="5" data-title="Lezione 5: Ripetere con while">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 05 &bull; Slide 1/5</span>
+          <span class="topic-badge">Automazione & Ripetizione</span>
+        </div>
+        <h2 class="slide-title">Ripetere Senza Fatica: Il Ciclo <code>while</code></h2>
+        <p class="slide-subtitle">Immagina di dover stampare i numeri da 1 a 1000. Scrivere 1000 righe a mano sarebbe noioso ed estenuante. I <strong>cicli</strong> automatizzano qualsiasi ripetizione.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Come Funziona il while ("Mentre...")</h3>
+            <p>Il computer continua a eseguire le istruzioni all'infinito <strong>finché</strong> la condizione resta vera.</p>
+            <div class="code-container">
+              <pre><code><span class="syn-type">int</span> conto_alla_rovescia = <span class="syn-num">5</span>;
+
+<span class="syn-kw">while</span> (conto_alla_rovescia &gt; <span class="syn-num">0</span>) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"%d...\n"</span>, conto_alla_rovescia);
+    conto_alla_rovescia--; <span class="syn-com">// Toglie 1 ogni volta</span>
+}
+
+<span class="syn-fn">printf</span>(<span class="syn-str">"Partenza!\n"</span>);</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="color: var(--danger);">🚨 Il Pericolo del Ciclo Infinito!</h3>
+            <p>Se dimentichi di aggiornare la variabile (ad esempio togliendo <code>conto_alla_rovescia--</code>), la condizione rimarrà vera per sempre e il computer non uscirà mai dal ciclo, esaurendo risorse.</p>
+            <p style="margin-top: 0.6rem; color: var(--text-muted); font-size: 0.9rem;">
+              Assicurati sempre che all'interno del blocco tra graffe ci sia un'istruzione che avvicini la variabile al punto di arresto.
+            </p>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Il Ciclo <code>while</code> e <code>do-while</code> in C
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=QPqUlhltgRk" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 14. Ciclo While e Do-While &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 13b: Il Ciclo do-while -->
+      <section class="slide" id="slide-13b" data-lesson="5" data-title="Lezione 5: Il Ciclo do-while">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 05 &bull; Slide 2/5</span>
+          <span class="topic-badge">Esecuzione Garantita</span>
+        </div>
+        <h2 class="slide-title">Il Ciclo <code>do-while</code>: Eseguire Almeno Una Volta</h2>
+        <p class="slide-subtitle">A differenza del normale <code>while</code> che controlla prima di entrare, il <code>do-while</code> esegue <strong>sempre almeno una volta</strong> le istruzioni prima di verificare la condizione.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container" style="margin-top: 0;">
+              <div class="code-header">
+                <span>Esempio Tipico: Validazione dell'Input</span>
+                <span style="color: var(--accent); font-weight: 600;">voto.c</span>
+              </div>
+              <pre><code><span class="syn-dir">#include</span> <span class="syn-str">&lt;stdio.h&gt;</span>
+
+<span class="syn-type">int</span> <span class="syn-fn">main</span>(<span class="syn-type">void</span>) {
+    <span class="syn-type">int</span> voto;
+
+    <span class="syn-com">// Chiede il voto e RIPETE se non è valido:</span>
+    <span class="syn-kw">do</span> {
+        <span class="syn-fn">printf</span>(<span class="syn-str">"Inserisci un voto da 1 a 10: "</span>);
+        <span class="syn-fn">scanf</span>(<span class="syn-str">"%d"</span>, &amp;voto);
+    } <span class="syn-kw">while</span> (voto &lt; <span class="syn-num">1</span> || voto &gt; <span class="syn-num">10</span>); <span class="syn-com">// &lt;-- Punto e virgola obbligatorio!</span>
+
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Voto valido registrato: %d\n"</span>, voto);
+    <span class="syn-kw">return</span> <span class="syn-num">0</span>;
+}</code></pre>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem;">
+              💡 <em>Prima si chiede il voto all'utente (azione iniziale), poi si controlla se è errato. Finché il voto non è tra 1 e 10, il ciclo richiede di digitare nuovamente il numero!</em>
+            </p>
+          </div>
+
+          <div class="card" style="margin-top: 0;">
+            <h3>Confronto Diretto: while vs do-while</h3>
+            <ul class="feature-list">
+              <li>
+                <strong><code>while (condizione)</code>:</strong><br>
+                <em>"Prima controlla, poi fai"</em>.<br>
+                Se la condizione è falsa fin dall'inizio, il corpo del ciclo non parte neanche una volta (<strong>0 esecuzioni</strong>).
+              </li>
+              <li>
+                <strong><code>do { ... } while (condizione);</code>:</strong><br>
+                <em>"Prima fai, poi controlla"</em>.<br>
+                Le istruzioni tra graffe vengono eseguite <strong>almeno una volta</strong>, perché il test è posizionato alla fine.
+              </li>
+              <li>
+                <strong>⚠️ La Regola del Punto e Virgola Finale:</strong><br>
+                Nel <code>do-while</code> è <strong>obbligatorio</strong> inserire il punto e virgola <code>;</code> subito dopo la parentesi tonda di chiusura: <code>while (...);</code>. Dimenticarlo è uno degli errori di distrazione più frequenti.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Approfondimento nella parte bassa della slide -->
+        <div class="analogy-box" style="margin-top: 1.25rem;">
+          <div class="analogy-title">🏧 L'Analogia del PIN al Bancomat</div>
+          <div class="analogy-text">
+            Pensa all'inserimento del PIN allo sportello: devi <strong>obbligatoriamente digitare il codice la prima volta</strong> (azione <code>do</code>). Solo dopo averlo inserito, lo sportello controlla se è corretto (controllo <code>while</code>). Se hai sbagliato, ti richiede di digitarlo di nuovo finché non inserisci quello giusto!
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Approfondimento sul Ciclo <code>do-while</code>
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=QPqUlhltgRk" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 14. Ciclo While e Do-While &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 14: Il Ciclo for -->
+      <section class="slide" id="slide-14" data-lesson="5" data-title="Lezione 5: Il Ciclo for">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 05 &bull; Slide 3/5</span>
+          <span class="topic-badge">Il Ciclo Perfetto</span>
+        </div>
+        <h2 class="slide-title">Il Ciclo <code>for</code>: Il Modo Più Comodo per Contare</h2>
+        <p class="slide-subtitle">Quando sai in anticipo quante volte ripetere un'azione (es. 10 volte, 100 volte), il ciclo <code>for</code> raggruppa tutto in una sola riga pulita ed elegante.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header"><span>Anatomia del ciclo for</span></div>
+              <pre><code><span class="syn-com">// 1. Parte da 0;  2. Finché i < 5;  3. Aumenta di 1</span>
+<span class="syn-kw">for</span> (<span class="syn-type">int</span> i = <span class="syn-num">0</span>; i &lt; <span class="syn-num">5</span>; i++) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Giro numero: %d\n"</span>, i);
+}
+
+<span class="syn-com">// Stampa sullo schermo:</span>
+<span class="syn-com">// Giro numero: 0</span>
+<span class="syn-com">// Giro numero: 1</span>
+<span class="syn-com">// Giro numero: 2</span>
+<span class="syn-com">// Giro numero: 3</span>
+<span class="syn-com">// Giro numero: 4</span></code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>I 3 Passi del for Spiegati</h3>
+            <ol style="padding-left: 1.25rem; font-size: 0.92rem; line-height: 1.8; color: var(--text-muted);">
+              <li><strong>Partenza (<code>int i = 0</code>):</strong> crea la variabile contatore <code>i</code> impostandola al valore iniziale.</li>
+              <li><strong>Traguardo (<code>i &lt; 5</code>):</strong> prima di ogni giro controlla se non abbiamo ancora superato il limite.</li>
+              <li><strong>Passo (<code>i++</code>):</strong> al termine di ogni giro incrementa il contatore di 1.</li>
+            </ol>
+            <p style="font-size: 0.88rem; color: var(--accent); margin-top: 0.8rem;">
+              La variabile <code>i</code> esiste solo dentro il ciclo: appena il ciclo finisce viene eliminata automaticamente per non creare confusione!
+            </p>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Il Ciclo <code>for</code>, <code>break</code> e <code>continue</code>
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=OSMSqzn4Lf4" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 15. Il Ciclo FOR in C &nearr;</a>
+            <a href="https://www.youtube.com/watch?v=HnwIIzWJwSI" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 16. Break e Continue &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 15: Simulatore Ciclo Passo-Passo -->
+      <section class="slide" id="slide-15" data-lesson="5" data-title="Lezione 5: Tracciamento Passo-Passo">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 05 &bull; Slide 4/5</span>
+          <span class="topic-badge">Laboratorio Interattivo</span>
+        </div>
+        <h2 class="slide-title">Laboratorio: Guarda il Ciclo in Azione Passo dopo Passo</h2>
+
+        <div class="interactive-box">
+          <div class="interactive-header">
+            <span>🔍 Tracciamento Visivo: Somma dei numeri da 1 a 5</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">Premi "Avanza di 1 Giro" per vedere come cambiano le variabili nella memoria del computer a ogni ripetizione:</p>
+          <div class="code-container" style="margin: 0.6rem 0;">
+            <div class="code-header"><span>📄 Codice C Eseguito dal Computer</span></div>
+            <pre style="margin: 0;"><code style="padding: 0.55rem 0.8rem; font-size: 0.86rem;"><span class="syn-type">int</span> somma = <span class="syn-num">0</span>;
+<span class="syn-kw">for</span> (<span class="syn-type">int</span> i = <span class="syn-num">1</span>; i &lt;= <span class="syn-num">5</span>; i++) {
+    somma += i;  <span class="syn-com">// Aggiunge il valore attuale di 'i' alla somma accumulata</span>
+}</code></pre>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.6rem; margin-bottom: 0.8rem;">
+            <button class="btn btn-primary" onclick="stepLoop()">Avanza di 1 Giro (Step)</button>
+            <button class="btn" onclick="resetLoop()">Ricomincia da Capo</button>
+            <span id="loop-status" style="font-size: 0.85rem; color: var(--accent); font-weight: bold; margin-left: 0.5rem;">Pronto all'avvio</span>
+          </div>
+
+          <div class="mem-grid">
+            <div class="mem-cell" id="cell-i">
+              <div class="mem-addr">Contatore</div>
+              <div class="mem-val" id="val-i">i = 0</div>
+              <div class="mem-name">Variabile i</div>
+            </div>
+            <div class="mem-cell" id="cell-sum">
+              <div class="mem-addr">Totale Accumulato</div>
+              <div class="mem-val" id="val-sum">somma = 0</div>
+              <div class="mem-name">Variabile somma</div>
+            </div>
+          </div>
+          <div class="interactive-terminal" id="loop-output">
+// Clicca "Avanza di 1 Giro" per iniziare il ciclo for...
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 5: Quiz di Verifica -->
+      <section class="slide" id="slide-quiz-5" data-lesson="5" data-title="Lezione 5: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 05 &bull; Slide 5/5</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 5</h2>
+        <p class="slide-subtitle">Due domande di verifica sui cicli while, do-while e for per ripetere operazioni in modo automatico.</p>
+
+        <!-- Domanda 5.1 con codice C -->
+        <div class="quiz-box" id="quiz-5">
+          <div class="quiz-question">Domanda 1: Quante volte verrà stampata la parola "Ciao" con il seguente codice C?</div>
+          <div class="code-container" style="margin: 0.75rem 0;">
+            <pre><code><span class="syn-kw">for</span> (<span class="syn-type">int</span> i = <span class="syn-num">0</span>; i &lt; <span class="syn-num">3</span>; i++) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Ciao "</span>);
+}</code></pre>
+          </div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('5', 0, false)">A) 2 volte</button>
+            <button class="quiz-btn" onclick="checkQuiz('5', 1, true)">B) 3 volte (quando la variabile 'i' vale 0, 1 e 2)</button>
+            <button class="quiz-btn" onclick="checkQuiz('5', 2, false)">C) 4 volte</button>
+            <button class="quiz-btn" onclick="checkQuiz('5', 3, false)">D) All'infinito senza mai fermarsi</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-5-fb"></div>
+        </div>
+
+        <!-- Domanda 5.2 -->
+        <div class="quiz-box" id="quiz-5b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: Qual è la caratteristica fondamentale che distingue il ciclo <code>do-while</code> dal normale ciclo <code>while</code>?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('5b', 0, false)">A) Il ciclo do-while può ripetere solo numeri negativi</button>
+            <button class="quiz-btn" onclick="checkQuiz('5b', 1, true)">B) Il ciclo do-while esegue il blocco di codice almeno una volta prima di verificare se la condizione è ancora vera</button>
+            <button class="quiz-btn" onclick="checkQuiz('5b', 2, false)">C) Il ciclo do-while non richiede alcuna condizione di arresto</button>
+            <button class="quiz-btn" onclick="checkQuiz('5b', 3, false)">D) Il ciclo do-while viene sempre ignorato dal compilatore</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-5b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 6: LE FUNZIONI
+           ============================================== -->
+      <!-- Slide 16: Cosa sono le Funzioni -->
+      <section class="slide" id="slide-16" data-lesson="6" data-title="Lezione 6: Creare i Propri Strumenti (Funzioni)">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 06 &bull; Slide 1/4</span>
+          <span class="topic-badge">Scomporre i Problemi</span>
+        </div>
+        <h2 class="slide-title">Le Funzioni: Costruire i Propri Strumenti</h2>
+        <p class="slide-subtitle">Un programma complesso può essere lungo migliaia di righe. Per non perdersi, si scompone il problema in "piccole macchine" riutilizzabili chiamate <strong>funzioni</strong>.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header"><span>Esempio di Funzione: Calcolo Area Rettangolo</span></div>
+              <pre><code><span class="syn-dir">#include</span> <span class="syn-str">&lt;stdio.h&gt;</span>
+
+<span class="syn-com">// 1. DEFINIAMO LA NOSTRA FUNZIONE</span>
+<span class="syn-type">int</span> <span class="syn-fn">calcola_area</span>(<span class="syn-type">int</span> base, <span class="syn-type">int</span> altezza) {
+    <span class="syn-type">int</span> risultato = base * altezza;
+    <span class="syn-kw">return</span> risultato; <span class="syn-com">// Restituisce il valore calcolato</span>
+}
+
+<span class="syn-type">int</span> <span class="syn-fn">main</span>(<span class="syn-type">void</span>) {
+    <span class="syn-com">// 2. USIAMO LA FUNZIONE</span>
+    <span class="syn-type">int</span> a1 = <span class="syn-fn">calcola_area</span>(<span class="syn-num">5</span>, <span class="syn-num">4</span>);   <span class="syn-com">// Restituisce 20</span>
+    <span class="syn-type">int</span> a2 = <span class="syn-fn">calcola_area</span>(<span class="syn-num">10</span>, <span class="syn-num">3</span>);  <span class="syn-com">// Restituisce 30</span>
+
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Aree calcolate: %d e %d\n"</span>, a1, a2);
+    <span class="syn-kw">return</span> <span class="syn-num">0</span>;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>I 3 Componenti di una Funzione</h3>
+            <ul class="feature-list">
+              <li><strong>Gli Ingressi (Parametri):</strong> sono i dati che diamo alla funzione (in questo caso la base e l'altezza).</li>
+              <li><strong>Il Corpo:</strong> le istruzioni che lavorano su quei dati (la moltiplicazione).</li>
+              <li><strong>L'Uscita (Valore di ritorno):</strong> la risposta che la funzione restituisce a chi l'ha chiamata (tramite la parola chiave <code>return</code>).</li>
+              <li>Se una funzione non deve restituire nulla (ad esempio deve solo stampare un saluto), si usa la parola speciale <strong><code>void</code></strong> (vuoto).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Le Funzioni e la Visibilità delle Variabili in C
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=SZuWLJFC7S4" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 20. Le Funzioni in C &nearr;</a>
+            <a href="https://www.youtube.com/watch?v=6VEv9QqX5jc" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 17. Visibilità delle Variabili (Scope) &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 17: L'Analogia della Fotocopia -->
+      <section class="slide" id="slide-17" data-lesson="6" data-title="Lezione 6: Come Vengono Passati i Dati">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 06 &bull; Slide 2/4</span>
+          <span class="topic-badge">Regola Fondamentale</span>
+        </div>
+        <h2 class="slide-title">L'Analogia della Fotocopia (Passaggio per Valore)</h2>
+        <p class="slide-subtitle">Una delle regole più importanti del C: quando passi una variabile a una funzione, la funzione riceve una <strong>fotocopia</strong>, non l'originale!</p>
+
+        <div class="analogy-box">
+          <div class="analogy-title">📄 L'Analogia della Fotocopia</div>
+          <div class="analogy-text">Se hai un foglio con i tuoi appunti a casa, ne fai una fotocopia e la consegni a un amico, e l'amico cancella o scrive qualcosa sulla fotocopia... il tuo foglio originale a casa rimane assolutamente intatto e invariato!</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Cosa Succede nel Codice</h3>
+            <div class="code-container">
+              <pre><code><span class="syn-type">void</span> <span class="syn-fn">prova_modifica</span>(<span class="syn-type">int</span> x) {
+    x = <span class="syn-num">999</span>; <span class="syn-com">// Modifica solo la fotocopia locale!</span>
+}
+
+<span class="syn-type">int</span> <span class="syn-fn">main</span>(<span class="syn-type">void</span>) {
+    <span class="syn-type">int</span> numero = <span class="syn-num">10</span>;
+    <span class="syn-fn">prova_modifica</span>(numero);
+    
+    <span class="syn-com">// 'numero' è rimasto 10!</span>
+    <span class="syn-fn">printf</span>(<span class="syn-str">"%d"</span>, numero); 
+    <span class="syn-kw">return</span> <span class="syn-num">0</span>;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>E se Volessimo Modificare l'Originale?</h3>
+            <p>Se vogliamo davvero che una funzione possa modificare il contenuto del nostro foglio originale a casa, non dobbiamo darle una fotocopia dei dati, ma <strong>l'indirizzo di casa</strong> della nostra scatola!</p>
+            <p style="margin-top: 0.6rem; color: var(--accent); font-weight: 600;">
+              Questo è il magico potere dei Puntatori, che scopriremo nella Lezione 8!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 18: Simulatore Stack Chiamata -->
+      <section class="slide" id="slide-18" data-lesson="6" data-title="Lezione 6: Laboratorio Call Stack">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 06 &bull; Slide 3/4</span>
+          <span class="topic-badge">Laboratorio Interattivo</span>
+        </div>
+        <h2 class="slide-title">Laboratorio: Come il Computer Ricorda le Funzioni</h2>
+
+        <div class="interactive-box">
+          <div class="interactive-header">
+            <span>📚 La Pila delle Funzioni (Call Stack)</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">Quando una funzione chiama un'altra funzione, il computer le sovrappone come una pila di piatti. Al termine di ciascuna, il piatto viene tolto:</p>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.6rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="callStackDemo(1)">Il main() chiama saluta()</button>
+            <button class="btn" onclick="callStackDemo(2)">saluta() chiama calcola()</button>
+            <button class="btn" onclick="callStackDemo(0)">Termina e torna al main()</button>
+          </div>
+          <div class="interactive-terminal" id="stack-output">
+Pila attuale della memoria:
+[ PIATTO 1: main() | Programma attivo ]
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 6: Quiz di Verifica -->
+      <section class="slide" id="slide-quiz-6" data-lesson="6" data-title="Lezione 6: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 06 &bull; Slide 4/4</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 6</h2>
+        <p class="slide-subtitle">Due domande di verifica sulla struttura delle funzioni e sul passaggio dei parametri per valore (la fotocopia).</p>
+
+        <!-- Domanda 6.1 -->
+        <div class="quiz-box" id="quiz-6">
+          <div class="quiz-question">Domanda 1: Se passi una variabile numerica 'a' a una funzione che esegue 'a = a + 5;', cosa accadrà al valore della variabile originale 'a' nel main?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('6', 0, false)">A) Aumenterà di 5 anche nel main</button>
+            <button class="quiz-btn" onclick="checkQuiz('6', 1, true)">B) Rimarrà identico a prima, perché la funzione ha modificato soltanto una copia locale (la fotocopia)</button>
+            <button class="quiz-btn" onclick="checkQuiz('6', 2, false)">C) Diventerà zero</button>
+            <button class="quiz-btn" onclick="checkQuiz('6', 3, false)">D) Il computer mostrerà un errore di sistema bloccandosi</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-6-fb"></div>
+        </div>
+
+        <!-- Domanda 6.2 con codice C -->
+        <div class="quiz-box" id="quiz-6b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: Osserva la seguente intestazione di funzione in C:</div>
+          <div class="code-container" style="margin: 0.75rem 0;">
+            <pre><code><span class="syn-type">void</span> <span class="syn-fn">stampa_messaggio</span>(<span class="syn-type">int</span> volte);</code></pre>
+          </div>
+          <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.75rem;">Cosa indica la parola chiave <code>void</code> all'inizio della dichiarazione?</p>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('6b', 0, false)">A) Che la funzione è guasta e non può essere utilizzata</button>
+            <button class="quiz-btn" onclick="checkQuiz('6b', 1, false)">B) Che la funzione deve restituire obbligatoriamente un numero intero</button>
+            <button class="quiz-btn" onclick="checkQuiz('6b', 2, true)">C) Che la funzione svolge il suo compito senza restituire alcun valore di risposta (nessun return)</button>
+            <button class="quiz-btn" onclick="checkQuiz('6b', 3, false)">D) Che la funzione cancella la memoria della macchina</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-6b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 7: GLI ARRAY E LE STRINGHE
+           ============================================== -->
+      <!-- Slide 19: Gli Array come Cassettiere -->
+      <section class="slide" id="slide-19" data-lesson="7" data-title="Lezione 7: Gli Array (Cassettiere di Dati)">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 07 &bull; Slide 1/4</span>
+          <span class="topic-badge">Dati Multipli</span>
+        </div>
+        <h2 class="slide-title">Gli Array: Una Fila di Cassetti Numerati</h2>
+        <p class="slide-subtitle">Se devi registrare i voti di 30 studenti, non ha senso inventare 30 variabili diverse. Un <strong>array</strong> è una singola cassettiera con tanti cassetti ordinati.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header"><span>Array di 5 Interi</span></div>
+              <pre><code><span class="syn-com">// Crea una cassettiera con 5 scomparti</span>
+<span class="syn-type">int</span> voti[<span class="syn-num">5</span>] = {<span class="syn-num">28</span>, <span class="syn-num">30</span>, <span class="syn-num">24</span>, <span class="syn-num">18</span>, <span class="syn-num">27</span>};
+
+<span class="syn-com">// Si accede con il numero del cassetto:</span>
+<span class="syn-fn">printf</span>(<span class="syn-str">"Primo voto:  %d\n"</span>, voti[<span class="syn-num">0</span>]); <span class="syn-com">// 28</span>
+<span class="syn-fn">printf</span>(<span class="syn-str">"Secondo voto: %d\n"</span>, voti[<span class="syn-num">1</span>]); <span class="syn-com">// 30</span>
+<span class="syn-fn">printf</span>(<span class="syn-str">"Ultimo voto:  %d\n"</span>, voti[<span class="syn-num">4</span>]); <span class="syn-com">// 27</span></code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Perché in Informatica si Inizia a Contare da 0?</h3>
+            <p>Questa è una delle curiosità che sorprende sempre i principianti! Il numero tra parentesi <code>[ i ]</code> non indica il numero d'ordine, ma la <strong>distanza (l'offset) dall'inizio</strong>:</p>
+            <ul class="feature-list" style="margin-top: 0.6rem;">
+              <li>Il 1° elemento è esattamente all'inizio &rarr; distanza <strong>0</strong>.</li>
+              <li>Il 2° elemento è a distanza <strong>1</strong>.</li>
+              <li>In un array da 5 posti, i cassetti sono numerati da <strong>0 a 4</strong>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Gli Array (Vettori) nel Linguaggio C
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=MSuvR9eeZHk" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 18. Gli Array in C &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 20: Le Stringhe (Parole e Testi) -->
+      <section class="slide" id="slide-20" data-lesson="7" data-title="Lezione 7: Le Stringhe e il Fine Testo '\0'">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 07 &bull; Slide 2/4</span>
+          <span class="topic-badge">Testo e Parole</span>
+        </div>
+        <h2 class="slide-title">Le Stringhe: Parole come Catene di Lettere</h2>
+        <p class="slide-subtitle">Nel computer il testo non è un blocco unico: una parola è semplicemente una sequenza di singoli caratteri <code>char</code> messi in fila uno dopo l'altro.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>La Collana di Lettere e il Punto di Fine <code>'\0'</code></h3>
+            <p>Come fa il computer a sapere quando una parola è finita? Alla fine aggiunge sempre un carattere invisibile speciale: il byte nullo <strong><code>'\0'</code></strong>.</p>
+            <div class="code-container">
+              <pre><code><span class="syn-type">char</span> nome[] = <span class="syn-str">"Mario"</span>;
+
+<span class="syn-com">// In memoria vengono occupati 6 posti:</span>
+<span class="syn-com">// ['M', 'a', 'r', 'i', 'o', '\0']</span></code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Gli Attrezzi per le Parole: &lt;string.h&gt;</h3>
+            <p>Includendo <code>&lt;string.h&gt;</code> abbiamo comandi già pronti:</p>
+            <ul class="feature-list">
+              <li><strong><code>strlen(nome)</code>:</strong> conta quante lettere ha la parola (escludendo il terminatore finale). Per "Mario" restituisce 5.</li>
+              <li><strong><code>strcmp(s1, s2)</code>:</strong> confronta due parole. Restituisce <code>0</code> se sono identiche lettera per lettera!</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span>🎬</span> <strong>Video di Spiegazione in Italiano:</strong> Le Stringhe e la Manipolazione del Testo in C
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=lGszD6OMgFQ" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 19. Le Stringhe in C &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 21: Laboratorio Array -->
+      <section class="slide" id="slide-21" data-lesson="7" data-title="Lezione 7: Laboratorio Array in Memoria">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 07 &bull; Slide 3/4</span>
+          <span class="topic-badge">Laboratorio Interattivo</span>
+        </div>
+        <h2 class="slide-title">Laboratorio: Gli Array Ordinati in Memoria</h2>
+
+        <div class="interactive-box">
+          <div class="interactive-header">
+            <span>📦 Vista a Raggi X: 4 Caselle di un Array in Memoria</span>
+          </div>
+          <div class="mem-grid">
+            <div class="mem-cell">
+              <div class="mem-addr">Indice [0]</div>
+              <div class="mem-val">10</div>
+              <div class="mem-name">primo elemento</div>
+            </div>
+            <div class="mem-cell">
+              <div class="mem-addr">Indice [1]</div>
+              <div class="mem-val">20</div>
+              <div class="mem-name">secondo elemento</div>
+            </div>
+            <div class="mem-cell">
+              <div class="mem-addr">Indice [2]</div>
+              <div class="mem-val">30</div>
+              <div class="mem-name">terzo elemento</div>
+            </div>
+            <div class="mem-cell">
+              <div class="mem-addr">Indice [3]</div>
+              <div class="mem-val">40</div>
+              <div class="mem-name">quarto elemento</div>
+            </div>
+          </div>
+          <div class="interactive-terminal">
+Gli elementi di un array sono memorizzati uno subito dopo l'altro in posizioni consecutive.
+Per questo motivo il computer può trovare qualsiasi elemento all'istante senza doverli scorrere tutti!
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 7: Quiz di Verifica -->
+      <section class="slide" id="slide-quiz-7" data-lesson="7" data-title="Lezione 7: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 07 &bull; Slide 4/4</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 7</h2>
+        <p class="slide-subtitle">Due domande di verifica sull'indicizzazione degli array e sulla gestione del terminatore delle stringhe in C.</p>
+
+        <!-- Domanda 7.1 con codice C -->
+        <div class="quiz-box" id="quiz-7">
+          <div class="quiz-question">Domanda 1: Se dichiariamo una cassettiera con 10 posti: <code>int numeri[10];</code>, qual è l'indice numerico dell'ultimissimo cassetto accessibile?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('7', 0, false)">A) numeri[10]</button>
+            <button class="quiz-btn" onclick="checkQuiz('7', 1, true)">B) numeri[9] (perché in C i 10 posti si contano partendo da 0: da 0 a 9)</button>
+            <button class="quiz-btn" onclick="checkQuiz('7', 2, false)">C) numeri[1]</button>
+            <button class="quiz-btn" onclick="checkQuiz('7', 3, false)">D) numeri[100]</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-7-fb"></div>
+        </div>
+
+        <!-- Domanda 7.2 -->
+        <div class="quiz-box" id="quiz-7b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: In C, perché una parola scritta come <code>char nome[] = "Mario";</code> occupa 6 byte in memoria pur essendo composta da 5 lettere?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('7b', 0, false)">A) Perché il computer riserva sempre un byte vuoto all'inizio della parola</button>
+            <button class="quiz-btn" onclick="checkQuiz('7b', 1, true)">B) Perché alla fine viene inserito in automatico il carattere speciale nullo '\0' che segnala la fine della parola</button>
+            <button class="quiz-btn" onclick="checkQuiz('7b', 2, false)">C) Perché la lettera iniziale maiuscola occupa 2 byte di spazio</button>
+            <button class="quiz-btn" onclick="checkQuiz('7b', 3, false)">D) È un bug del compilatore C</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-7b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 8: I PUNTATORI (GLI INDIRIZZI)
+           ============================================== -->
+      <!-- Slide 22: Cosa è un Puntatore -->
+      <section class="slide" id="slide-22" data-lesson="8" data-title="Lezione 8: Cosa sono i Puntatori">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 08 &bull; Slide 1/4</span>
+          <span class="topic-badge">Il Cuore del Computer</span>
+        </div>
+        <h2 class="slide-title">I Puntatori: I Numeri Civici della Memoria</h2>
+        <p class="slide-subtitle">Molti pensano che i puntatori siano difficili, ma in realtà il concetto è semplicissimo: <strong>un puntatore è solo un foglietto con scritto l'indirizzo di una scatola</strong>.</p>
+
+        <div class="analogy-box">
+          <div class="analogy-title">📬 L'Analogia della Casa e del Numero Civico</div>
+          <div class="analogy-text">Pensa alla memoria del computer come a una lunghissima via con milioni di villette a schiera. Ciascuna villetta ha un <strong>numero civico</strong> unico (l'indirizzo di memoria). Una normale variabile è il mobile dentro casa; un <strong>puntatore</strong> è un biglietto da visita su cui hai scritto quel numero civico per ricordarti dove andare.</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>I Due Simboli Magici: & e *</h3>
+            <ul class="feature-list">
+              <li><strong><code>&amp;valore</code> (Indirizzo di):</strong> legge il numero civico della scatola (es. <code>0x7FFE20</code>).</li>
+              <li><strong><code>*ptr</code> (Vai a vedere dentro):</strong> segue l'indirizzo, apre la porta e ti permette di leggere o cambiare cosa c'è dentro.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="code-container">
+              <pre><code><span class="syn-type">int</span> segreto = <span class="syn-num">42</span>;
+
+<span class="syn-com">// ptr è un puntatore che memorizza l'indirizzo di 'segreto'</span>
+<span class="syn-type">int</span> *ptr = &segreto;
+
+<span class="syn-fn">printf</span>(<span class="syn-str">"Valore: %d\n"</span>, *ptr); <span class="syn-com">// Stampa 42</span>
+
+<span class="syn-com">// Modifichiamo il valore a distanza!</span>
+*ptr = <span class="syn-num">100</span>;
+<span class="syn-fn">printf</span>(<span class="syn-str">"Nuovo: %d\n"</span>, segreto); <span class="syn-com">// 'segreto' ora è 100!</span></code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span class="video-icon">🎬</span>
+            <div>
+              <div class="video-box-title">Video di Spiegazione in Italiano</div>
+              <div class="video-box-desc">Approfondisci il funzionamento dei puntatori, degli indirizzi di memoria (<code>&amp;</code>) e della dereferenziazione (<code>*</code>):</div>
+            </div>
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=oiGXAmZRaG8" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 21. I Puntatori in C &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 23: Scambiare Due Valori (swap) -->
+      <section class="slide" id="slide-23" data-lesson="8" data-title="Lezione 8: Modificare Dati a Distanza (swap)">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 08 &bull; Slide 2/4</span>
+          <span class="topic-badge">Applicazione Pratica</span>
+        </div>
+        <h2 class="slide-title">Modificare Dati a Distanza: Lo Scambio (swap)</h2>
+        <p class="slide-subtitle">Ora capiamo finalmente perché i puntatori sono indispensabili: permettono a una funzione di andare a modificare le variabili originali.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header"><span>La Funzione Scambia (swap)</span></div>
+              <pre><code><span class="syn-com">// Riceve gli indirizzi di due scatole</span>
+<span class="syn-type">void</span> <span class="syn-fn">scambia</span>(<span class="syn-type">int</span> *a, <span class="syn-type">int</span> *b) {
+    <span class="syn-type">int</span> temporaneo = *a; <span class="syn-com">// Legge valore in 'a'</span>
+    *a = *b;             <span class="syn-com">// Mette valore di 'b' in 'a'</span>
+    *b = temporaneo;     <span class="syn-com">// Mette il vecchio valore in 'b'</span>
+}
+
+<span class="syn-type">int</span> <span class="syn-fn">main</span>(<span class="syn-type">void</span>) {
+    <span class="syn-type">int</span> x = <span class="syn-num">5</span>, y = <span class="syn-num">10</span>;
+    
+    <span class="syn-com">// Passiamo gli indirizzi (&x, &y)</span>
+    <span class="syn-fn">scambia</span>(&x, &y);
+    
+    <span class="syn-com">// Ora x vale 10 e y vale 5!</span>
+    <span class="syn-fn">printf</span>(<span class="syn-str">"x = %d, y = %d\n"</span>, x, y);
+    <span class="syn-kw">return</span> <span class="syn-num">0</span>;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>L'Analogia dei Due Bicchieri</h3>
+            <p>Se hai un bicchiere con succo d'arancia e uno con succo di mela, per scambiarli ti serve un <strong>terzo bicchiere vuoto temporaneo</strong>:</p>
+            <ol style="padding-left: 1.25rem; font-size: 0.92rem; line-height: 1.7; color: var(--text-muted); margin-top: 0.5rem;">
+              <li>Versi l'arancia nel bicchiere temporaneo.</li>
+              <li>Versi la mela nel primo bicchiere.</li>
+              <li>Versi l'arancia dal temporaneo nel secondo bicchiere.</li>
+            </ol>
+            <p style="margin-top: 0.8rem; font-size: 0.88rem; color: var(--accent);">
+              Grazie ai puntatori, la funzione ha potuto svolgere questo scambio direttamente sui bicchieri originali!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 24: Simulatore Grafico Puntatori -->
+      <section class="slide" id="slide-24" data-lesson="8" data-title="Lezione 8: Laboratorio Puntatori">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 08 &bull; Slide 3/4</span>
+          <span class="topic-badge">Laboratorio Interattivo</span>
+        </div>
+        <h2 class="slide-title">Laboratorio: Modifica una Scatola Tramite Puntatore</h2>
+
+        <div class="interactive-box">
+          <div class="interactive-header">
+            <span>🎯 Interazione Puntatore in Tempo Reale</span>
+          </div>
+          <div class="mem-grid">
+            <div class="mem-cell" id="ptr-cell-var">
+              <div class="mem-addr">Indirizzo: 0x7FFE20</div>
+              <div class="mem-val" id="ptr-val-var">42</div>
+              <div class="mem-name">Scatola 'valore'</div>
+            </div>
+            <div class="mem-cell highlight" id="ptr-cell-p">
+              <div class="mem-addr">Indirizzo: 0x7FFE28</div>
+              <div class="mem-val" id="ptr-val-p">0x7FFE20</div>
+              <div class="mem-name">Puntatore 'ptr' &rarr; punta a 'valore'</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="simPointerModify(100)">Modifica tramite: *ptr = 100</button>
+            <button class="btn btn-primary" onclick="simPointerModify(999)">Modifica tramite: *ptr = 999</button>
+            <button class="btn" onclick="simPointerReset()">Ripristina Valore Originale</button>
+          </div>
+          <div class="interactive-terminal" id="ptr-terminal">
+Memoria pronta: 'ptr' contiene l'indirizzo civico 0x7FFE20. Se tocchiamo *ptr, andiamo a modificare la scatola 'valore'!
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 8: Quiz di Verifica -->
+      <section class="slide" id="slide-quiz-8" data-lesson="8" data-title="Lezione 8: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 08 &bull; Slide 4/4</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 8</h2>
+        <p class="slide-subtitle">Due domande di verifica per accertare la padronanza dei puntatori, dell'operatore indirizzo (&) e dell'operatore di dereferenziazione (*).</p>
+
+        <!-- Domanda 8.1 -->
+        <div class="quiz-box" id="quiz-8">
+          <div class="quiz-question">Domanda 1: Se abbiamo una variabile 'x' e vogliamo ricavare il suo indirizzo di memoria (il numero civico della scatola), quale simbolo usiamo?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('8', 0, false)">A) *x</button>
+            <button class="quiz-btn" onclick="checkQuiz('8', 1, true)">B) &x (l'operatore indirizzo)</button>
+            <button class="quiz-btn" onclick="checkQuiz('8', 2, false)">C) %x</button>
+            <button class="quiz-btn" onclick="checkQuiz('8', 3, false)">D) x++</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-8-fb"></div>
+        </div>
+
+        <!-- Domanda 8.2 con codice C -->
+        <div class="quiz-box" id="quiz-8b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: Osserva il seguente codice C con i puntatori:</div>
+          <div class="code-container" style="margin: 0.75rem 0;">
+            <pre><code><span class="syn-type">int</span> valore = <span class="syn-num">10</span>;
+<span class="syn-type">int</span> *ptr = &valore;
+*ptr = <span class="syn-num">50</span>;</code></pre>
+          </div>
+          <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.75rem;">Cosa accade al contenuto della variabile 'valore' dopo l'esecuzione di <code>*ptr = 50;</code>?</p>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('8b', 0, false)">A) Rimane 10 perché il puntatore non può alterare la variabile originale</button>
+            <button class="quiz-btn" onclick="checkQuiz('8b', 1, true)">B) Diventa 50, perché l'asterisco *ptr segue l'indirizzo e modifica direttamente la scatola puntata</button>
+            <button class="quiz-btn" onclick="checkQuiz('8b', 2, false)">C) Il puntatore viene cancellato e si verifica un errore</button>
+            <button class="quiz-btn" onclick="checkQuiz('8b', 3, false)">D) La variabile valore assume il valore zero</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-8b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 9: LE STRUTTURE (STRUCT)
+           ============================================== -->
+      <!-- Slide 25: Raggruppare Dati Correlati -->
+      <section class="slide" id="slide-25" data-lesson="9" data-title="Lezione 9: Creare Tipi di Dati Personalizzati">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 09 &bull; Slide 1/4</span>
+          <span class="topic-badge">Dati Complessi</span>
+        </div>
+        <h2 class="slide-title">Le Strutture: Creare Schede di Dati Complete</h2>
+        <p class="slide-subtitle">Nel mondo reale gli oggetti hanno tante caratteristiche diverse. Ad esempio una persona ha un nome (testo), un'età (intero) e un'altezza (decimale). Con le <strong>struct</strong> possiamo raggrupparli insieme.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header"><span>Definire una Scheda Studente</span></div>
+              <pre><code><span class="syn-com">// Definiamo un nuovo tipo di dato chiamato 'Studente'</span>
+<span class="syn-kw">typedef struct</span> {
+    <span class="syn-type">char</span> nome[<span class="syn-num">30</span>];
+    <span class="syn-type">int</span> matricola;
+    <span class="syn-type">double</span> media_voti;
+} <span class="syn-type">Studente</span>;
+
+<span class="syn-type">int</span> <span class="syn-fn">main</span>(<span class="syn-type">void</span>) {
+    <span class="syn-com">// Creiamo una nuova scheda studente</span>
+    <span class="syn-type">Studente</span> s1 = {<span class="syn-str">"Mario Rossi"</span>, <span class="syn-num">102345</span>, <span class="syn-num">28.5</span>};
+
+    <span class="syn-com">// Si accede ai singoli campi con il punto (.)</span>
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Nome: %s, Media: %.1f\n"</span>, s1.nome, s1.media_voti);
+    <span class="syn-kw">return</span> <span class="syn-num">0</span>;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>L'Operatore Punto (.)</h3>
+            <p>Il punto è la chiave per aprire un singolo scomparto della scheda:</p>
+            <ul class="feature-list" style="margin-top: 0.6rem;">
+              <li><code>s1.nome</code> per leggere o scrivere il nome.</li>
+              <li><code>s1.matricola</code> per il numero di matricola.</li>
+              <li><code>s1.media_voti</code> per la media esami.</li>
+            </ul>
+            <p style="margin-top: 0.8rem; font-size: 0.9rem; color: var(--text-muted);">
+              La parola <code>typedef</code> serve semplicemente per dare un nome breve e comodo (<code>Studente</code>) senza dover riscrivere ogni volta <code>struct Studente</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span class="video-icon">🎬</span>
+            <div>
+              <div class="video-box-title">Video di Spiegazione in Italiano</div>
+              <div class="video-box-desc">Guarda la spiegazione su come creare e usare le strutture (<code>struct</code>) in C:</div>
+            </div>
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=aAzT2Mazntk" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 22. Le Strutture (struct) in C &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 26: L'Operatore Freccia -> -->
+      <section class="slide" id="slide-26" data-lesson="9" data-title="Lezione 9: Puntatori a Strutture (->)">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 09 &bull; Slide 2/4</span>
+          <span class="topic-badge">Sintassi Pratica</span>
+        </div>
+        <h2 class="slide-title">L'Operatore Freccia (<code>-&gt;</code>)</h2>
+        <p class="slide-subtitle">Cosa succede se abbiamo un puntatore a una scheda? Il C ci regala una comoda scorciatoia visiva: la freccia <code>-&gt;</code>.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Dalla Forma Lunga alla Freccia</h3>
+            <p>Se <code>ptr</code> punta alla scheda <code>s1</code>, per accedere a un campo dovremmo scrivere: <em>"apri la scatola puntata e prendi il campo"</em>, cioè <code>(*ptr).media_voti</code>.</p>
+            <p style="margin-top: 0.6rem;">Per evitare questa sintassi scomoda, in C si usa la freccia:</p>
+            <div class="code-container">
+              <pre><code><span class="syn-type">Studente</span> s1 = {<span class="syn-str">"Anna"</span>, <span class="syn-num">98765</span>, <span class="syn-num">29.0</span>};
+<span class="syn-type">Studente</span> *ptr = &s1;
+
+<span class="syn-com">// Facile, intuitivo e chiaro:</span>
+ptr-&gt;matricola = <span class="syn-num">99999</span>;
+<span class="syn-fn">printf</span>(<span class="syn-str">"Nuova matricola: %d\n"</span>, ptr-&gt;matricola);</code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Dare Nomi alle Opzioni: enum</h3>
+            <p>Le <strong>enumerazioni (enum)</strong> permettono di sostituire numeri anonimi con etichette leggibili:</p>
+            <div class="code-container">
+              <pre><code><span class="syn-kw">typedef enum</span> {
+    FERMO,       <span class="syn-com">// Vale 0</span>
+    IN_MOVIMENTO,<span class="syn-com">// Vale 1</span>
+    IN_PAUSA     <span class="syn-com">// Vale 2</span>
+} <span class="syn-type">StatoGioco</span>;
+
+<span class="syn-type">StatoGioco</span> stato = IN_MOVIMENTO;</code></pre>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Il codice diventa molto più chiaro da leggere rispetto a usare numeri a caso come 0 o 1.</p>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span class="video-icon">🎬</span>
+            <div>
+              <div class="video-box-title">Video di Spiegazione in Italiano</div>
+              <div class="video-box-desc">Approfondisci le enumerazioni (<code>enum</code>) e l'uso combinato con le strutture:</div>
+            </div>
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=amJwrKPY6mU" target="_blank" rel="noopener noreferrer" class="video-btn">▶ 23. Le Enumerazioni (enum) in C &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 27: Riepilogo Sintassi Struct ed Enum -->
+      <section class="slide" id="slide-27" data-lesson="9" data-title="Lezione 9: Sintassi Struct ed Enum">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 09 &bull; Slide 3/4</span>
+          <span class="topic-badge">Riepilogo Sintassi</span>
+        </div>
+        <h2 class="slide-title">Riepilogo: La Sintassi di Struct ed Enum</h2>
+        <p class="slide-subtitle">Confronto immediato tra l'accesso diretto ai campi e l'accesso tramite puntatore con l'operatore freccia.</p>
+
+        <div class="card">
+          <h3>Riepilogo Visivo della Sintassi</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+            <div style="background: var(--code-bg); padding: 1rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.9rem;">
+              <span style="color: var(--accent); font-weight: bold;">Quando hai la variabile diretta:</span><br><br>
+              <code>Studente s;</code><br>
+              Usa il <strong>PUNTO (.)</strong>:<br>
+              <code style="color: #a3e635;">s.matricola = 123;</code>
+            </div>
+            <div style="background: var(--code-bg); padding: 1rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.9rem;">
+              <span style="color: var(--accent); font-weight: bold;">Quando hai il puntatore:</span><br><br>
+              <code>Studente *ptr = &s;</code><br>
+              Usa la <strong>FRECCIA (-&gt;)</strong>:<br>
+              <code style="color: #a3e635;">ptr-&gt;matricola = 123;</code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 9: Quiz di Verifica -->
+      <section class="slide" id="slide-quiz-9" data-lesson="9" data-title="Lezione 9: Quiz di Verifica">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 09 &bull; Slide 4/4</span>
+          <span class="topic-badge">Quiz di Verifica</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Lezione 9</h2>
+        <p class="slide-subtitle">Due domande di verifica sulla creazione di tipi di dati personalizzati (struct) e sulla sintassi con punto (.) e freccia (->).</p>
+
+        <!-- Domanda 9.1 -->
+        <div class="quiz-box" id="quiz-9">
+          <div class="quiz-question">Domanda 1: Se possiedi un puntatore a struttura 'ptr', quale delle seguenti istruzioni permette di modificare il campo 'voto'?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('9', 0, false)">A) ptr.voto = 30;</button>
+            <button class="quiz-btn" onclick="checkQuiz('9', 1, true)">B) ptr->voto = 30; (operatore freccia per accedere ai campi tramite puntatore)</button>
+            <button class="quiz-btn" onclick="checkQuiz('9', 2, false)">C) &ptr.voto = 30;</button>
+            <button class="quiz-btn" onclick="checkQuiz('9', 3, false)">D) ptr::voto = 30;</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-9-fb"></div>
+        </div>
+
+        <!-- Domanda 9.2 -->
+        <div class="quiz-box" id="quiz-9b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: Qual è la differenza principale tra un array e una <code>struct</code> in C?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('9b', 0, false)">A) L'array può contenere solo testo, mentre la struct può contenere solo numeri interi</button>
+            <button class="quiz-btn" onclick="checkQuiz('9b', 1, true)">B) L'array raggruppa elementi tutti dello stesso tipo, mentre la struct può unire variabili di tipi diversi (es. testi, interi, decimali) in una singola scheda</button>
+            <button class="quiz-btn" onclick="checkQuiz('9b', 2, false)">C) Una struct non può essere memorizzata nella RAM del computer</button>
+            <button class="quiz-btn" onclick="checkQuiz('9b', 3, false)">D) Non c'è alcuna differenza, sono due modi identici per fare la stessa cosa</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-9b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           LEZIONE 10: LA MEMORIA DEL COMPUTER & BUONE PRATICHE
+           ============================================== -->
+      <!-- Slide 28: Stack vs Heap -->
+      <section class="slide" id="slide-28" data-lesson="10" data-title="Lezione 10: Come è Organizzata la Memoria">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 10 &bull; Slide 1/5</span>
+          <span class="topic-badge">La Memoria RAM</span>
+        </div>
+        <h2 class="slide-title">Il Banco di Lavoro (Stack) e il Magazzino (Heap)</h2>
+        <p class="slide-subtitle">Come organizza il computer la sua memoria durante l'esecuzione del programma? Ci sono due grandi aree da conoscere.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3 style="color: var(--accent);">1. Lo Stack (Il Banco di Lavoro Rapido)</h3>
+            <ul class="feature-list">
+              <li>È lo spazio dove vengono create le normali variabili delle funzioni.</li>
+              <li><strong>Completamente automatico:</strong> quando una funzione termina, tutte le sue variabili spariscono e la memoria si libera da sola.</li>
+              <li>È velocissimo, ma ha una capienza limitata (non puoi metterci array enormi da milioni di dati).</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3 style="color: var(--tip-color);">2. L'Heap (Il Grande Magazzino a Richiesta)</h3>
+            <ul class="feature-list">
+              <li>È un'area di memoria gigantesca (tutta la RAM disponibile nel computer).</li>
+              <li><strong>Controllo manuale:</strong> sei tu che chiedi al computer una certa quantità di memoria quando ti serve, e decidi tu quando restituirla.</li>
+              <li>I dati rimangono vivi finché non decidi tu di eliminarli.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 29: malloc e free -->
+      <section class="slide" id="slide-29" data-lesson="10" data-title="Lezione 10: malloc e free">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 10 &bull; Slide 2/5</span>
+          <span class="topic-badge">Memoria Dinamica</span>
+        </div>
+        <h2 class="slide-title">Chiedere Spazio: <code>malloc</code> e <code>free</code></h2>
+        <p class="slide-subtitle">Grazie alla libreria <code>&lt;stdlib.h&gt;</code> possiamo chiedere spazio di memoria durante l'esecuzione del programma.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code-container">
+              <div class="code-header"><span>Il Ciclo di Vita della Memoria</span></div>
+              <pre><code><span class="syn-dir">#include</span> <span class="syn-str">&lt;stdlib.h&gt;</span>
+
+<span class="syn-com">// 1. Chiediamo spazio per 100 numeri interi:</span>
+<span class="syn-type">int</span> *vettore = <span class="syn-fn">malloc</span>(<span class="syn-num">100</span> * <span class="syn-kw">sizeof</span>(<span class="syn-type">int</span>));
+
+<span class="syn-com">// 2. Controlliamo che il computer avesse memoria libera</span>
+<span class="syn-kw">if</span> (vettore == NULL) {
+    <span class="syn-fn">printf</span>(<span class="syn-str">"Memoria esaurita!\n"</span>);
+    <span class="syn-kw">return</span> <span class="syn-num">1</span>;
+}
+
+<span class="syn-com">// 3. Usiamo la memoria</span>
+vettore[<span class="syn-num">0</span>] = <span class="syn-num">42</span>;
+
+<span class="syn-com">// 4. REGOLA D'ORO: RESTITUISCI LA MEMORIA!</span>
+<span class="syn-fn">free</span>(vettore);
+vettore = NULL; <span class="syn-com">// Buona abitudine</span></code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Le Due Parole Chiave</h3>
+            <ul class="feature-list">
+              <li><strong><code>malloc(dimensione)</code>:</strong> sta per <em>Memory Allocation</em>. Chiede al computer: <em>"Per favore, riservami questi Byte nel magazzino"</em> e ti restituisce l'indirizzo di memoria per raggiungerli.</li>
+              <li><strong><code>free(puntatore)</code>:</strong> dice al computer: <em>"Ho finito di usare questo spazio, rimettilo pure a disposizione per altri programmi"</em>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="video-box">
+          <div class="video-box-info">
+            <span class="video-icon">🎬</span>
+            <div>
+              <div class="video-box-title">Video di Spiegazione in Italiano</div>
+              <div class="video-box-desc">Approfondisci l'allocazione dinamica della memoria (Stack vs Heap, <code>malloc</code> e <code>free</code>):</div>
+            </div>
+          </div>
+          <div class="video-box-links">
+            <a href="https://www.youtube.com/watch?v=OXq0J-wVS_I" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Allocazione Dinamica (malloc e free) &nearr;</a>
+            <a href="https://www.youtube.com/watch?v=pwBN-Citga4" target="_blank" rel="noopener noreferrer" class="video-btn">▶ Puntatori e Memoria Dinamica &nearr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 30: Il Memory Leak e Simulatore -->
+      <section class="slide" id="slide-30" data-lesson="10" data-title="Lezione 10: Simulatore Memory Leak">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 10 &bull; Slide 3/5</span>
+          <span class="topic-badge">Attenzione ai Bug</span>
+        </div>
+        <h2 class="slide-title">Attenzione al Memory Leak (Memoria Dimenticata)</h2>
+        <p class="slide-subtitle">Se prendi in prestito dei libri in biblioteca e non li restituisci mai, la biblioteca presto resterà vuota. In informatica questo errore si chiama <strong>Memory Leak</strong>.</p>
+
+        <div class="interactive-box">
+          <div class="interactive-header">
+            <span>📦 Monitor Interattivo del Magazzino di Memoria</span>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">Sperimenta con i pulsanti per vedere cosa accade quando allochi memoria con <code>malloc</code>, la liberi con <code>free</code> o la dimentichi:</p>
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="heapAllocate(1024)">Alloca 1 KB (malloc)</button>
+            <button class="btn btn-primary" onclick="heapAllocate(4096)">Alloca 4 KB (malloc)</button>
+            <button class="btn" onclick="heapFree()">Libera Memoria (free)</button>
+            <button class="btn" style="border-color: var(--danger); color: var(--danger);" onclick="heapLosePointer()">Dimentica Puntatore (LEAK!)</button>
+          </div>
+          <div class="interactive-terminal" id="heap-terminal">
+Magazzino pronto. Memoria attualmente occupata: 0 Byte.
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;">
+          <h3>Regola di Buona Educazione del Programmatore</h3>
+          <p>A ogni <code>malloc()</code> che scrivi nel tuo codice deve sempre corrispondere prima o poi una chiamata a <code>free()</code>. Chiudere le risorse usate rende i programmi stabili, veloci e affidabili.</p>
+        </div>
+      </section>
+
+      <!-- Slide 31: Buone Abitudini del Programmatore C -->
+      <section class="slide" id="slide-31" data-lesson="10" data-title="Lezione 10: Buone Abitudini del Programmatore">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 10 &bull; Slide 4/5</span>
+          <span class="topic-badge">Buone Abitudini</span>
+        </div>
+        <h2 class="slide-title">Buone Abitudini del Programmatore C</h2>
+        <p class="slide-subtitle">Consigli essenziali e regole d'oro per scrivere codice robusto, leggibile e privo di bug fin dal primo giorno.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>I 4 Consigli per Non Sbagliare Mai</h3>
+            <ul class="feature-list">
+              <li><strong>Inizializza sempre le variabili:</strong> una scatola appena creata contiene dati residui casuali; assegnale subito un valore iniziale (es. <code>int conto = 0;</code>).</li>
+              <li><strong>Controlla gli indici degli array:</strong> non scrivere mai oltre la fine del cassetto per non corrompere la memoria.</li>
+              <li><strong>Commenta il tuo codice:</strong> scrivi brevi commenti con <code>//</code> per spiegare a te stesso e agli altri cosa fa quella riga.</li>
+              <li><strong>Fatti aiutare dal compilatore:</strong> attiva sempre gli avvisi con <code>gcc -Wall -Wextra</code> per farti segnalare subito eventuali distrazioni.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Leggibilità e Manutenzione del Codice</h3>
+            <ul class="feature-list">
+              <li><strong>Indenta bene il codice:</strong> usa gli spazi o le tabulazioni dentro le graffe <code>{ ... }</code> per evidenziare subito quali istruzioni appartengono a una funzione o a un blocco if/while.</li>
+              <li><strong>Separa la logica in piccoli passi:</strong> se una funzione supera le 30-40 righe, valuta di dividerla in due funzioni più semplici e specializzate.</li>
+              <li><strong>Gestisci sempre la memoria:</strong> ad ogni <code>malloc</code> associa sempre la sua <code>free</code> prima di uscire dal programma.</li>
+              <li><strong>Non aver paura dei messaggi di errore:</strong> sono la guida migliore per correggere sviste e distrazioni di battitura!</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide Quiz Lezione 10: Quiz di Verifica Finale -->
+      <section class="slide" id="slide-quiz-10" data-lesson="10" data-title="Lezione 10: Quiz di Verifica Finale">
+        <div class="slide-meta">
+          <span class="lesson-tag">Lezione 10 &bull; Slide 5/5</span>
+          <span class="topic-badge">Quiz di Verifica Finale</span>
+        </div>
+        <h2 class="slide-title">Mettiti alla Prova: Quiz Finale del Corso</h2>
+        <p class="slide-subtitle">Due domande conclusive per testare la tua comprensione della memoria (Stack vs Heap) e dell'allocazione dinamica con malloc e free.</p>
+
+        <!-- Domanda 10.1 -->
+        <div class="quiz-box" id="quiz-10">
+          <div class="quiz-question">Domanda 1: Cosa succede se allochi memoria nell'Heap con 'malloc' e ti dimentichi di chiamare 'free' prima di chiudere la funzione?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('10', 0, false)">A) Il computer cancella automaticamente il file del codice sorgente</button>
+            <button class="quiz-btn" onclick="checkQuiz('10', 1, false)">B) Non succede nulla, la memoria dell'Heap si pulisce istantaneamente da sola</button>
+            <button class="quiz-btn" onclick="checkQuiz('10', 2, true)">C) Si verifica un Memory Leak (perdita di memoria): lo spazio rimane bloccato e sprecato inutilmente</button>
+            <button class="quiz-btn" onclick="checkQuiz('10', 3, false)">D) Il programma aumenta di velocità</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-10-fb"></div>
+        </div>
+
+        <!-- Domanda 10.2 -->
+        <div class="quiz-box" id="quiz-10b" style="margin-top: 1.5rem;">
+          <div class="quiz-question">Domanda 2: Qual è la differenza principale tra lo Stack e l'Heap nella memoria RAM?</div>
+          <div class="quiz-options">
+            <button class="quiz-btn" onclick="checkQuiz('10b', 0, false)">A) Lo Stack serve solo per le connessioni internet, l'Heap per i videogiochi</button>
+            <button class="quiz-btn" onclick="checkQuiz('10b', 1, true)">B) Lo Stack gestisce automaticamente le variabili delle funzioni liberandole alla fine; l'Heap è un magazzino enorme gestito manualmente dal programmatore con malloc e free</button>
+            <button class="quiz-btn" onclick="checkQuiz('10b', 2, false)">C) Sull'Heap si possono inserire solo numeri interi positivi</button>
+            <button class="quiz-btn" onclick="checkQuiz('10b', 3, false)">D) Lo Stack è memorizzato su una chiavetta USB esterna</button>
+          </div>
+          <div class="quiz-feedback" id="quiz-10b-fb"></div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           APPROFONDIMENTO SPECIALE: OPERATORE SIZEOF
+           ============================================== -->
+      <!-- Slide di Approfondimento su sizeof (dopo la Slide 31) -->
+      <section class="slide" id="slide-sizeof" data-lesson="10" data-title="Approfondimento: L'Operatore sizeof">
+        <div class="slide-meta">
+          <span class="lesson-tag">Approfondimento Speciale &bull; Memoria RAM</span>
+          <span class="topic-badge">Operatore sizeof</span>
+        </div>
+        <h2 class="slide-title">Approfondimento: L'Operatore <code>sizeof</code></h2>
+        <p class="slide-subtitle">Come funziona la bilancia della memoria del C: sintassi, trucchi per calcolare la lunghezza degli array e il tipo speciale <code>size_t</code>.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>1. Non è una Funzione: È a Costo Zero!</h3>
+            <p>Anche se si usano le parentesi tonde come per le funzioni, <code>sizeof</code> è un <strong>operatore del compilatore</strong>.</p>
+            <p style="margin-top: 0.5rem;">Viene calcolato prima che il programma inizi, direttamente durante la compilazione: non consuma tempo di calcolo quando il programma è in esecuzione!</p>
+            <div class="code-container" style="margin-top: 0.6rem;">
+              <pre><code><span class="syn-com">// Usato su un tipo:</span>
+<span class="syn-fn">printf</span>(<span class="syn-str">"%zu\n"</span>, <span class="syn-kw">sizeof</span>(<span class="syn-type">int</span>));    <span class="syn-com">// Stampa 4</span>
+<span class="syn-fn">printf</span>(<span class="syn-str">"%zu\n"</span>, <span class="syn-kw">sizeof</span>(<span class="syn-type">double</span>)); <span class="syn-com">// Stampa 8</span></code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>2. Usato Direttamente sulle Variabili</h3>
+            <p>Puoi passare a <code>sizeof</code> il nome di una variabile senza dover ricordare di quale tipo fosse:</p>
+            <div class="code-container" style="margin-top: 0.6rem;">
+              <pre><code><span class="syn-type">double</span> temperatura = <span class="syn-num">36.5</span>;
+<span class="syn-type">int</span> anni = <span class="syn-num">20</span>;
+
+<span class="syn-com">// Le parentesi sono opzionali con le variabili:</span>
+<span class="syn-fn">printf</span>(<span class="syn-str">"%zu byte\n"</span>, <span class="syn-kw">sizeof</span> temperatura); <span class="syn-com">// 8</span>
+<span class="syn-fn">printf</span>(<span class="syn-str">"%zu byte\n"</span>, <span class="syn-kw">sizeof</span> anni);        <span class="syn-com">// 4</span></code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>3. Il Trucco del Conteggio Array</h3>
+            <p>Un trucco classico usato da tutti i programmatori C per contare quanti elementi ha un array senza contarli a mano:</p>
+            <div class="code-container" style="margin-top: 0.6rem;">
+              <pre><code><span class="syn-type">int</span> numeri[] = {<span class="syn-num">10</span>, <span class="syn-num">20</span>, <span class="syn-num">30</span>, <span class="syn-num">40</span>, <span class="syn-num">50</span>};
+
+<span class="syn-com">// Byte totali diviso byte del singolo elemento:</span>
+<span class="syn-type">int</span> lunghezza = <span class="syn-kw">sizeof</span>(numeri) / <span class="syn-kw">sizeof</span>(numeri[<span class="syn-num">0</span>]);
+<span class="syn-fn">printf</span>(<span class="syn-str">"Elementi: %d\n"</span>, lunghezza); <span class="syn-com">// 5</span></code></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>4. Il Tipo di Ritorno: size_t e %zu</h3>
+            <p><code>sizeof</code> restituisce un tipo intero speciale chiamato <code>size_t</code>, garantito essere sufficientemente grande da contenere la dimensione massima di memoria del computer.</p>
+            <p style="margin-top: 0.5rem;">Per stamparlo con <code>printf</code> si usa il segnaposto specifico <strong><code>%zu</code></strong>:</p>
+            <div class="code-container" style="margin-top: 0.6rem;">
+              <pre><code><span class="syn-fn">printf</span>(<span class="syn-str">"Spazio: %zu Byte\n"</span>, <span class="syn-kw">sizeof</span>(<span class="syn-type">int</span>));</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn" onclick="goToSlide(7)">
+            &larr; Torna alla Tabella dei Tipi (Lezione 2)
+          </button>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn" onclick="goToSlide(41)">
+              &larr; Torna al Quiz Finale (Lezione 10)
+            </button>
+            <button class="btn btn-primary" onclick="goToSlide(43)">
+              Concludi il Corso &rarr;
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           SLIDE 32: CERTIFICATO & CONCLUSIONE
+           ============================================== -->
+      <section class="slide" id="slide-32" data-lesson="11" data-title="Congratulazioni! Corso Completato">
+        <div class="slide-meta">
+          <span class="lesson-tag">Traguardo Raggiunto!</span>
+          <span class="topic-badge">Corso Completato</span>
+        </div>
+        <h1 class="slide-title">Complimenti! Hai completato le 10 Lezioni di C</h1>
+        <p class="slide-subtitle">Hai imparato le basi essenziali della programmazione: come pensa un computer, come memorizzare dati, come prendere decisioni, ripetere azioni, strutturare il codice e gestire la memoria.</p>
+
+        <div class="grid-3" style="margin-top: 1.5rem;">
+          <div class="card" style="text-align: center; border-color: var(--success);">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎓</div>
+            <h3 style="justify-content: center; color: var(--success);">Il Tuo Risultato</h3>
+            <p id="final-score-text" style="font-size: 1.6rem; font-weight: bold; color: var(--text-main); margin: 0.5rem 0;">0 / 20</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Risposte corrette nei quiz di verifica</p>
+          </div>
+
+          <div class="card">
+            <h3>I 5 Pilastri che Ora Conosci</h3>
+            <ol style="padding-left: 1.25rem; font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+              <li><strong>Variabili:</strong> scatole per i dati (<code>int</code>, <code>double</code>, <code>char</code>).</li>
+              <li><strong>Condizioni:</strong> prendere decisioni (<code>if</code>, <code>else</code>, <code>switch</code>).</li>
+              <li><strong>Cicli:</strong> ripetere istruzioni (<code>while</code>, <code>for</code>).</li>
+              <li><strong>Funzioni:</strong> mattoncini modulari riutilizzabili.</li>
+              <li><strong>Puntatori:</strong> gli indirizzi fisici della memoria RAM.</li>
+            </ol>
+          </div>
+
+          <div class="card">
+            <h3>I Tuoi Prossimi Passi</h3>
+            <ul class="feature-list" style="font-size: 0.88rem;">
+              <li>Scrivi piccoli programmi da console (calcolatrici, giochi a indovinello di numeri).</li>
+              <li>Esercitati a leggere e scrivere numeri con gli array.</li>
+              <li>Non temere gli errori: ogni messaggio di errore del compilatore è un indizio per migliorare!</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
+          <button class="btn btn-primary" onclick="goToSlide(0)">Ricomincia dalla Dashboard</button>
+          <button class="btn" onclick="openTocModal()">Sfoglia l'Indice delle Lezioni</button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div style="display: flex; gap: 0.5rem;">
+      <button class="btn" id="prevBtn" onclick="prevSlide()" title="Slide Precedente (&larr;)">
+        &larr; Indietro
+      </button>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextSlide()" title="Slide Successiva (&rarr;)">
+        Avanti &rarr;
+      </button>
+    </div>
+
+    <div class="slide-counter" id="slideCounter">Slide 1 / 44</div>
+
+    <div class="key-hints">
+      <span>Naviga: <span class="kbd">&larr;</span> <span class="kbd">&rarr;</span> o <span class="kbd">Spazio</span></span>
+      <span>Indice: <span class="kbd">M</span></span>
+      <span>Schermo intero: <span class="kbd">F</span></span>
+    </div>
+  </footer>
+
+  <!-- TABLE OF CONTENTS MODAL -->
+  <div class="modal-overlay" id="tocModal" onclick="closeTocModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main);">Indice delle 10 Lezioni di Programmazione</h2>
+        <button class="btn" onclick="closeTocModal()">Chiudi &times;</button>
+      </div>
+      <div class="modal-body" id="tocList">
+        <!-- Generato dinamicamente da JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // State management
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let quizScores = {};
+
+    // Inizializzazione
+    window.addEventListener('DOMContentLoaded', () => {
+      buildToc();
+      updateSlideView();
+      updateTypeInfo('int');
+    });
+
+    // Navigazione Slide
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = index;
+        slides[currentSlide].classList.add('active');
+        updateSlideView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        goToSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        goToSlide(currentSlide - 1);
+      }
+    }
+
+    function updateSlideView() {
+      document.getElementById('slideCounter').innerText = `Slide ${currentSlide + 1} / ${totalSlides}`;
+      
+      const pct = (currentSlide / (totalSlides - 1)) * 100;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+
+      document.getElementById('prevBtn').disabled = (currentSlide === 0);
+      document.getElementById('nextBtn').disabled = (currentSlide === totalSlides - 1);
+
+      document.querySelectorAll('.toc-item').forEach((item, idx) => {
+        item.classList.toggle('current', idx === currentSlide);
+      });
+
+      if (currentSlide === totalSlides - 1) {
+        const correctCount = Object.values(quizScores).filter(v => v === true).length;
+        const totalQuizzes = Object.keys(quizExplanations).length;
+        document.getElementById('final-score-text').innerText = `${correctCount} / ${totalQuizzes}`;
+      }
+    }
+
+    // Costruzione dinamica dell'indice
+    function buildToc() {
+      const container = document.getElementById('tocList');
+      container.innerHTML = '';
+
+      slides.forEach((slide, idx) => {
+        const title = slide.getAttribute('data-title') || `Slide ${idx + 1}`;
+        const lessonNum = slide.getAttribute('data-lesson');
+        const badge = (lessonNum === "0") ? "Home" : (lessonNum === "11") ? "Fine" : (slide.id === "slide-sizeof") ? "Extra" : `Lez ${lessonNum}`;
+
+        const item = document.createElement('div');
+        item.className = `toc-item ${idx === currentSlide ? 'current' : ''}`;
+        item.onclick = () => {
+          goToSlide(idx);
+          closeTocModal();
+        };
+
+        item.innerHTML = `
+          <div class="toc-title">
+            <span>${title}</span>
+            <span class="topic-badge">${badge}</span>
+          </div>
+          <div class="toc-sub">Slide ${idx + 1} di ${totalSlides}</div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function openTocModal() {
+      document.getElementById('tocModal').classList.add('active');
+    }
+
+    function closeTocModal(e) {
+      if (!e || e.target === document.getElementById('tocModal') || e.target.closest('button')) {
+        document.getElementById('tocModal').classList.remove('active');
+      }
+    }
+
+    // Modalità Schermo Intero
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn("Fullscreen non supportato o bloccato", err);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Cambio Tema Chiaro/Scuro
+    function toggleTheme() {
+      const body = document.body;
+      const current = body.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', next);
+      document.getElementById('theme-icon').innerText = next === 'dark' ? '☀️' : '🌙';
+    }
+
+    // Scorciatoie da tastiera
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(totalSlides - 1);
+      } else if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFullscreen();
+      } else if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        const modal = document.getElementById('tocModal');
+        if (modal.classList.contains('active')) {
+          closeTocModal();
+        } else {
+          openTocModal();
+        }
+      } else if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        toggleTheme();
+      } else if (e.key === 'Escape') {
+        closeTocModal();
+      }
+    });
+
+    // Touch swipe su dispositivi touch
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    window.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    window.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) {
+        nextSlide();
+      }
+      if (touchEndX > touchStartX + 50) {
+        prevSlide();
+      }
+    }
+
+    // ----------------------------------------------------
+    // LOGICA QUIZ
+    // ----------------------------------------------------
+    const quizExplanations = {
+      '1': "Esatto! Il computer capisce solo il linguaggio binario fatto di 0 e 1. Il compilatore traduce le istruzioni che scriviamo noi in un programma che il processore può eseguire.",
+      '1b': "Esatto! In C ogni istruzione deve terminare tassativamente con il punto e virgola (;), proprio come una frase termina con il punto. Dimenticarlo è uno degli errori più comuni per chi inizia!",
+      '2': "Corretto! Il tipo 'float' è fatto apposta per gestire i numeri con la virgola decimale (come i prezzi, le temperature e le medie).",
+      '2b': "Esatto! I nomi delle variabili in C possono contenere lettere, numeri e trattini bassi '_', ma non possono iniziare con una cifra, né contenere spazi o caratteri speciali.",
+      '3': "Esatto! %d è un segnaposto che indica al computer dove inserire il valore del numero intero dentro alla frase stampata da printf.",
+      '3b': "Esatto! Nella divisione tra numeri interi (7 e 2), il linguaggio C calcola il quoziente intero troncando i decimali (7 / 2 = 3). Per avere il resto si usa invece l'operatore modulo (7 % 2 = 1).",
+      '4': "Corretto! In informatica il simbolo '==' (doppio uguale) si usa per verificare l'uguaglianza logica tra due valori, mentre '=' (singolo) serve per assegnare un dato a una variabile.",
+      '4b': "Esatto! Il comando 'break;' ordina al computer di interrompere immediatamente il blocco switch una volta eseguito il caso corrispondente, senza scivolare nei casi sottostanti.",
+      '5': "Esatto! Il ciclo for inizia con i=0, poi esegue con i=1 e infine con i=2 (3 giri in totale). Quando 'i' diventa 3, la condizione 'i < 3' diventa falsa e il ciclo si arresta.",
+      '5b': "Corretto! A differenza del 'while' che valuta prima la condizione, il 'do-while' esegue sempre il corpo del ciclo almeno una volta prima di verificare se deve ripetere.",
+      '6': "Corretto! Le funzioni in C lavorano su una fotocopia (copia locale) dei dati ricevuti per valore. La variabile originale nel main rimane intatta.",
+      '6b': "Esatto! La parola chiave 'void' (vuoto) indica che la funzione svolge un'azione (come stampare a video) ma non restituisce alcun valore a chi l'ha chiamata.",
+      '7': "Esatto! Poiché gli indici in C partono da 0 (distanza dall'inizio), i 10 elementi di un array vanno esattamente dall'indice 0 all'indice 9.",
+      '7b': "Corretto! Nelle stringhe C il carattere speciale nullo '\\0' (terminatore) viene posto automaticamente alla fine per indicare a funzioni come printf dove termina il testo.",
+      '8': "Corretto! Il simbolo '&' posto davanti al nome di una variabile ricava il suo indirizzo di memoria (il numero civico della scatola in RAM).",
+      '8b': "Esatto! L'operatore di dereferenziazione '*ptr' permette di accedere direttamente alla cella di memoria puntata per modificarne o leggerne il valore originale a distanza.",
+      '9': "Corretto! Quando hai un puntatore a una struct, l'operatore freccia '->' è la scorciatoia comoda ed elegante per accedere ai suoi singoli campi.",
+      '9b': "Esatto! Un array contiene una serie di elementi tutti identici tra loro (es. tutti int), mentre una struct ti permette di raggruppare tipi eterogenei (es. nome, matricola, media) in un'unica scheda.",
+      '10': "Esatto! Se allochi spazio nell'Heap con malloc e non lo restituisci con free, quello spazio rimane bloccato consumando memoria del computer (Memory Leak).",
+      '10b': "Corretto! Lo Stack è automatico e si ripulisce da solo all'uscita di ogni funzione; l'Heap è il grande magazzino della RAM controllato manualmente dal programmatore."
+    };
+
+    function checkQuiz(quizNum, optionIdx, isCorrect) {
+      const container = document.getElementById(`quiz-${quizNum}`);
+      const buttons = container.querySelectorAll('.quiz-btn');
+      const fb = document.getElementById(`quiz-${quizNum}-fb`);
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === optionIdx) {
+          btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        }
+      });
+
+      quizScores[quizNum] = isCorrect;
+
+      fb.style.display = 'block';
+      if (isCorrect) {
+        fb.style.background = 'var(--success-bg)';
+        fb.style.border = '1px solid var(--success)';
+        fb.style.color = 'var(--success)';
+        fb.innerHTML = `<strong>✔ Risposta Esatta!</strong> ${quizExplanations[quizNum]}`;
+      } else {
+        fb.style.background = 'var(--danger-bg)';
+        fb.style.border = '1px solid var(--danger)';
+        fb.style.color = 'var(--danger)';
+        fb.innerHTML = `<strong>✖ Non è corretto.</strong> Rileggi le slide di questa lezione per chiarire il concetto!`;
+      }
+    }
+
+    // ----------------------------------------------------
+    // SIMULATORI INTERATTIVI
+    // ----------------------------------------------------
+
+    const allCtypesData = {
+      'char': {
+        name: 'char',
+        header: 'Tipo nativo di base',
+        bytes: '1 Byte (8 bit)',
+        spec: '%c (carattere) o %d (numero)',
+        range: '-128 .. +127 oppure 0 .. 255 (secondo il sistema)',
+        desc: 'Memorizza un singolo carattere (es. \'A\', \'z\', \'9\') oppure un numero intero piccolissimo. È il blocco costruttivo fondamentale dei testi in C.'
+      },
+      'signed_char': {
+        name: 'signed char',
+        header: 'Tipo nativo di base',
+        bytes: '1 Byte (8 bit)',
+        spec: '%d (oppure %c)',
+        range: '-128 .. +127',
+        desc: 'Carattere o intero a 8 bit esplicitamente con segno. Ideale quando si vuole essere certi di poter gestire valori negativi a 8 bit.'
+      },
+      'unsigned_char': {
+        name: 'unsigned char',
+        header: 'Tipo nativo di base',
+        bytes: '1 Byte (8 bit)',
+        spec: '%u (oppure %c)',
+        range: '0 .. 255',
+        desc: 'Intero a 8 bit senza segno (solo positivi o zero). Comunissimo per manipolare singoli byte grezzi, file binari, immagini o pacchetti di rete.'
+      },
+      'short': {
+        name: 'short (o short int)',
+        header: 'Tipo nativo di base',
+        bytes: '2 Byte (16 bit)',
+        spec: '%hd',
+        range: '-32.768 .. +32.767',
+        desc: 'Intero a dimensione ridotta: occupa la metà dello spazio di un int standard; molto usato in dispositivi a bassa memoria o microcontroller.'
+      },
+      'unsigned_short': {
+        name: 'unsigned short',
+        header: 'Tipo nativo di base',
+        bytes: '2 Byte (16 bit)',
+        spec: '%hu',
+        range: '0 .. 65.535',
+        desc: 'Intero a 16 bit senza segno: solo numeri positivi o zero. Raddoppia la capienza massima positiva rispetto a short.'
+      },
+      'int': {
+        name: 'int (signed int)',
+        header: 'Tipo nativo di base',
+        bytes: '4 Byte (32 bit tipico)',
+        spec: '%d (o %i)',
+        range: '-2.147.483.648 .. +2.147.483.647',
+        desc: 'Il tipo intero standard per eccellenza in C. Utilizzato per la stragrande maggioranza di contatori, indici di cicli, età e conteggi generali.'
+      },
+      'unsigned_int': {
+        name: 'unsigned int',
+        header: 'Tipo nativo di base',
+        bytes: '4 Byte (32 bit tipico)',
+        spec: '%u',
+        range: '0 .. 4.294.967.295 (~4,29 miliardi)',
+        desc: 'Intero a 32 bit senza segno: non ammette numeri negativi, permettendo di raddoppiare il valore massimo positivo raggiungibile.'
+      },
+      'long': {
+        name: 'long (o long int)',
+        header: 'Tipo nativo di base',
+        bytes: '4 o 8 Byte (32 o 64 bit)',
+        spec: '%ld',
+        range: 'Almeno -2.147.483.648 .. +2.147.483.647 (fino a ±9 trilioni su sistemi 64-bit)',
+        desc: 'Intero esteso: garantisce di essere grande almeno quanto un int o più. Su sistemi Unix/Linux a 64 bit occupa 8 Byte.'
+      },
+      'unsigned_long': {
+        name: 'unsigned long',
+        header: 'Tipo nativo di base',
+        bytes: '4 o 8 Byte (32 o 64 bit)',
+        spec: '%lu',
+        range: '0 .. 4.294.967.295 (se 32 bit) o fino a 18 trilioni (se 64 bit)',
+        desc: 'Intero esteso senza segno: perfetto per conteggi positivi giganteschi o dimensioni di risorse di sistema.'
+      },
+      'long_long': {
+        name: 'long long (o long long int)',
+        header: 'Tipo nativo di base',
+        bytes: '8 Byte (64 bit)',
+        spec: '%lld',
+        range: '-9.223.372.036.854.775.808 .. +9.223.372.036.854.775.807 (~9 trilioni)',
+        desc: 'Intero gigante garantito a 64 bit: fondamentale per contatori di tempo in millisecondi/nanosecondi (timestamp) o identificativi univoci enormi.'
+      },
+      'unsigned_long_long': {
+        name: 'unsigned long long',
+        header: 'Tipo nativo di base',
+        bytes: '8 Byte (64 bit)',
+        spec: '%llu',
+        range: '0 .. 18.446.744.073.709.551.615 (~18 trilioni)',
+        desc: 'Il tipo intero più grande fornito nativamente dal C: accoglie numeri positivi fino a oltre 18 miliardi di miliardi.'
+      },
+      'float': {
+        name: 'float',
+        header: 'Tipo nativo di base (virgola mobile)',
+        bytes: '4 Byte (32 bit)',
+        spec: '%f',
+        range: '±1.17 × 10^-38 .. ±3.40 × 10^38 (~6-7 cifre significative)',
+        desc: 'Numero con la virgola a precisione singola: leggero e veloce, molto usato nella grafica 3D, nei videogiochi e nei sensori fisici.'
+      },
+      'double': {
+        name: 'double',
+        header: 'Tipo nativo di base (doppia precisione)',
+        bytes: '8 Byte (64 bit)',
+        spec: '%lf (oppure %f in printf)',
+        range: '±2.22 × 10^-308 .. ±1.79 × 10^308 (~15-17 cifre significative)',
+        desc: 'Numero con virgola a doppia precisione: è la scelta predefinita e consigliata per calcoli matematici, prezzi monetari e simulazioni reali.'
+      },
+      'long_double': {
+        name: 'long double',
+        header: 'Tipo nativo di base (precisione estesa)',
+        bytes: '10, 12 o 16 Byte (80..128 bit)',
+        spec: '%Lf',
+        range: 'Fino a ±3.36 × 10^-4932 .. ±1.18 × 10^+4932 (~19-34 cifre)',
+        desc: 'Precisione massima per calcoli scientifici di laboratorio, astrofisica o simulazioni matematiche dove l\'errore di arrotondamento deve essere quasi nullo.'
+      },
+      'bool': {
+        name: 'bool',
+        header: 'Includere <stdbool.h>',
+        bytes: '1 Byte (8 bit)',
+        spec: '%d (stampa 1 per true, 0 per false)',
+        range: 'true (1) oppure false (0)',
+        desc: 'Tipo booleano per memorizzare decisioni e stati logici binari (vero/falso, attivo/disattivo). Rende il codice infinitamente più chiaro da leggere.'
+      },
+      'void': {
+        name: 'void',
+        header: 'Tipo speciale di sistema',
+        bytes: '0 Byte (assenza di valore)',
+        spec: 'Non applicabile',
+        range: 'Nessun valore memorizzabile',
+        desc: 'Indica l\'assenza di valore o tipo: ad esempio una funzione che non restituisce nulla (es. void stampaSaluto()), o un puntatore a memoria generica (void*).'
+      },
+      'size_t': {
+        name: 'size_t',
+        header: 'Includere <stddef.h> o <stdio.h>',
+        bytes: '4 o 8 Byte (pari all\'architettura)',
+        spec: '%zu',
+        range: '0 .. dimensione massima di un oggetto allocabile in RAM',
+        desc: 'Intero senza segno restituito da sizeof per rappresentare la dimensione in byte di qualsiasi variabile o tipo, e la lunghezza di blocchi di memoria.'
+      },
+      'int8_t': {
+        name: 'int8_t',
+        header: 'Includere <stdint.h>',
+        bytes: '1 Byte (8 bit esatti)',
+        spec: '%d (oppure PRId8)',
+        range: '-128 .. +127',
+        desc: 'Intero con segno garantito a 8 bit esatti su qualsiasi computer, architettura o sistema operativo.'
+      },
+      'uint8_t': {
+        name: 'uint8_t',
+        header: 'Includere <stdint.h>',
+        bytes: '1 Byte (8 bit esatti)',
+        spec: '%u (oppure PRIu8)',
+        range: '0 .. 255',
+        desc: 'Intero senza segno garantito a 8 bit esatti. Il tipo d\'elezione per buffer di rete, flussi di byte, colori e driver hardware.'
+      },
+      'int16_t': {
+        name: 'int16_t',
+        header: 'Includere <stdint.h>',
+        bytes: '2 Byte (16 bit esatti)',
+        spec: '%d (oppure PRId16)',
+        range: '-32.768 .. +32.767',
+        desc: 'Intero con segno garantito a 16 bit: sicuro e privo di ambiguità di compilatore.'
+      },
+      'uint16_t': {
+        name: 'uint16_t',
+        header: 'Includere <stdint.h>',
+        bytes: '2 Byte (16 bit esatti)',
+        spec: '%u (oppure PRIu16)',
+        range: '0 .. 65.535',
+        desc: 'Intero a 16 bit senza segno esatto. Perfetto ad esempio per le porte di rete internet (0 .. 65535, come porta 80 per HTTP o 443 per HTTPS).'
+      },
+      'int32_t': {
+        name: 'int32_t',
+        header: 'Includere <stdint.h>',
+        bytes: '4 Byte (32 bit esatti)',
+        spec: '%d (oppure PRId32)',
+        range: '-2.147.483.648 .. +2.147.483.647',
+        desc: 'Intero con segno garantito a 32 bit esatti ovunque, ideale per formati di file standard e compatibilità tra sistemi diversi.'
+      },
+      'uint32_t': {
+        name: 'uint32_t',
+        header: 'Includere <stdint.h>',
+        bytes: '4 Byte (32 bit esatti)',
+        spec: '%u (oppure PRIu32)',
+        range: '0 .. 4.294.967.295',
+        desc: 'Intero senza segno a 32 bit esatti. Standard per indirizzi IPv4, colori RGBA (8 bit per rosso, verde, blu, alfa) e checksum CRC32.'
+      },
+      'int64_t': {
+        name: 'int64_t',
+        header: 'Includere <stdint.h>',
+        bytes: '8 Byte (64 bit esatti)',
+        spec: '%lld (oppure PRId64)',
+        range: '-9.223.372.036.854.775.808 .. +9.223.372.036.854.775.807',
+        desc: 'Intero con segno a 64 bit esatti: essenziale per calcoli ad alta precisione, contatori di record in database e dimensioni di file superiori a 4 GB.'
+      },
+      'uint64_t': {
+        name: 'uint64_t',
+        header: 'Includere <stdint.h>',
+        bytes: '8 Byte (64 bit esatti)',
+        spec: '%llu (oppure PRIu64)',
+        range: '0 .. 18.446.744.073.709.551.615',
+        desc: 'Intero senza segno a 64 bit esatti. Ideale per algoritmi di crittografia, impronte digitali hash e architetture di memoria estese.'
+      }
+    };
+
+    function updateTypeInfo(typeKey) {
+      const data = allCtypesData[typeKey];
+      const card = document.getElementById('typeDetailCard');
+      if (!data || !card) return;
+
+      card.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 0.75rem;">
+          <div>
+            <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; display: block;">Nome del Tipo</span>
+            <span style="font-family: var(--font-mono); font-weight: 700; color: #38bdf8; font-size: 1.05rem;">${data.name}</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted); display: block;">${data.header}</span>
+          </div>
+          <div>
+            <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; display: block;">Spazio Occupato in RAM</span>
+            <span style="font-weight: 600; color: var(--accent); font-size: 0.95rem;">${data.bytes}</span>
+          </div>
+          <div>
+            <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; display: block;">Formato printf</span>
+            <span style="font-family: var(--font-mono); background: var(--bg-card); padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid var(--border-color); color: #fbbf24; font-size: 0.88rem;">${data.spec}</span>
+          </div>
+        </div>
+        <div style="margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border-color);">
+          <strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em;">Intervallo di valori (Range):</strong>
+          <div style="font-family: var(--font-mono); font-size: 0.88rem; color: #4ade80; margin-top: 0.2rem; word-break: break-all;">${data.range}</div>
+        </div>
+        <div style="padding-top: 0.5rem; border-top: 1px solid var(--border-color);">
+          <strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em;">A cosa serve & Descrizione:</strong>
+          <div style="color: var(--text-main); font-size: 0.88rem; margin-top: 0.2rem; line-height: 1.5;">${data.desc}</div>
+        </div>
+      `;
+    }
+
+    function testPrintf() {
+      const val = parseFloat(document.getElementById('io-val').value) || 0;
+      const prec = parseInt(document.getElementById('io-prec').value) || 0;
+      const term = document.getElementById('io-output');
+      const formatted = val.toFixed(prec);
+      term.innerHTML = `Istruzione C:   printf("%.${prec}f\\n", ${val});\n` +
+                       `Output a video: ${formatted}`;
+    }
+
+    function evalAgeDiscount() {
+      const ageInput = document.getElementById('sim-age');
+      const age = parseInt(ageInput ? ageInput.value : 22) || 0;
+      const term = document.getElementById('age-output');
+      const etaVal = document.getElementById('code-eta-val');
+      if (etaVal) etaVal.innerText = age;
+
+      const bChild = document.getElementById('branch-child');
+      const bTeen = document.getElementById('branch-teen');
+      const bAdult = document.getElementById('branch-adult');
+      const bSenior = document.getElementById('branch-senior');
+
+      if (bChild) bChild.classList.remove('active');
+      if (bTeen) bTeen.classList.remove('active');
+      if (bAdult) bAdult.classList.remove('active');
+      if (bSenior) bSenior.classList.remove('active');
+
+      let tariffa = "";
+      let ramo = "";
+
+      if (age < 6) {
+        tariffa = "Gratuito (0 €)";
+        ramo = "if (età < 6) -> Bambino";
+        if (bChild) bChild.classList.add('active');
+      } else if (age < 18) {
+        tariffa = "Biglietto Ragazzi (5 €)";
+        ramo = "else if (età < 18) -> Minorenne";
+        if (bTeen) bTeen.classList.add('active');
+      } else if (age < 65) {
+        tariffa = "Biglietto Standard (10 €)";
+        ramo = "else if (età < 65) -> Adulti";
+        if (bAdult) bAdult.classList.add('active');
+      } else {
+        tariffa = "Biglietto Senior (6 €)";
+        ramo = "else -> Over 65";
+        if (bSenior) bSenior.classList.add('active');
+      }
+
+      if (term) {
+        term.innerHTML = `Età analizzata: ${age} anni\n` +
+                         `Ramo eseguito:  ${ramo}\n` +
+                         `Prezzo finale:  ${tariffa}`;
+      }
+    }
+
+    function setAge(val) {
+      const input = document.getElementById('sim-age');
+      if (input) {
+        input.value = val;
+        evalAgeDiscount();
+      }
+    }
+
+    let loopStep = 0;
+    let loopSum = 0;
+    const maxLoop = 5;
+
+    function stepLoop() {
+      const term = document.getElementById('loop-output');
+      if (loopStep >= maxLoop) {
+        term.innerHTML = `Ciclo terminato!\n` +
+                         `Il contatore 'i' ha superato il limite di 5, quindi il ciclo si è fermato.\n` +
+                         `Somma finale accumulata: ${loopSum}.`;
+        document.getElementById('loop-status').innerText = "Ciclo terminato con successo!";
+        return;
+      }
+
+      loopStep++;
+      loopSum += loopStep;
+
+      document.getElementById('val-i').innerText = `i = ${loopStep}`;
+      document.getElementById('val-sum').innerText = `somma = ${loopSum}`;
+      document.getElementById('cell-i').classList.add('highlight');
+      document.getElementById('cell-sum').classList.add('highlight');
+
+      term.innerHTML = `Giro #${loopStep}:\n` +
+                       `1. Il contatore 'i' vale ${loopStep}\n` +
+                       `2. Aggiungiamo 'i' alla somma: totale attuale = ${loopSum}\n` +
+                       `3. Passo successivo pronto!`;
+      document.getElementById('loop-status').innerText = `Giro ${loopStep} di 5 in corso...`;
+    }
+
+    function resetLoop() {
+      loopStep = 0;
+      loopSum = 0;
+      document.getElementById('val-i').innerText = `i = 0`;
+      document.getElementById('val-sum').innerText = `somma = 0`;
+      document.getElementById('cell-i').classList.remove('highlight');
+      document.getElementById('cell-sum').classList.remove('highlight');
+      document.getElementById('loop-status').innerText = "Pronto all'avvio";
+      document.getElementById('loop-output').innerHTML = `// Ciclo resettato: pronto ad avanzare`;
+    }
+
+    function callStackDemo(level) {
+      const term = document.getElementById('stack-output');
+      if (level === 0) {
+        term.innerHTML = `Pila attuale della memoria:\n` +
+                         `[ PIATTO 1: main() | Programma attivo ]\n\n` +
+                         `Le altre funzioni sono terminate e i loro piatti sono stati rimossi.`;
+      } else if (level === 1) {
+        term.innerHTML = `Pila attuale della memoria:\n` +
+                         `[ PIATTO 2: saluta() (funzione in esecuzione) ]\n` +
+                         `[ PIATTO 1: main()    (in attesa del ritorno) ]`;
+      } else if (level === 2) {
+        term.innerHTML = `Pila attuale della memoria:\n` +
+                         `[ PIATTO 3: calcola() (funzione in esecuzione) ]\n` +
+                         `[ PIATTO 2: saluta()  (in attesa del ritorno) ]\n` +
+                         `[ PIATTO 1: main()    (in attesa del ritorno) ]`;
+      }
+    }
+
+    function simPointerModify(newVal) {
+      document.getElementById('ptr-val-var').innerText = newVal;
+      document.getElementById('ptr-cell-var').classList.add('highlight');
+      document.getElementById('ptr-terminal').innerHTML = 
+        `Istruzione eseguita: *ptr = ${newVal};\n` +
+        `Il computer ha seguito l'indirizzo 0x7FFE20 ed è andato a scrivere ${newVal} nella scatola 'valore'.\n` +
+        `Ora la scatola contiene: ${newVal}!`;
+    }
+
+    function simPointerReset() {
+      document.getElementById('ptr-val-var').innerText = "42";
+      document.getElementById('ptr-terminal').innerHTML = "Valore ripristinato a 42.";
+    }
+
+    let heapBlocks = [];
+    function heapAllocate(size) {
+      const id = Date.now().toString().slice(-4);
+      heapBlocks.push({ id, size });
+      updateHeapTerminal(`malloc(${size}): Spazio riservato nel magazzino all'indirizzo 0x${Math.floor(Math.random()*0xFFFF000 + 0x1000000).toString(16)}.`);
+    }
+
+    function heapFree() {
+      if (heapBlocks.length === 0) {
+        updateHeapTerminal("Nessun blocco di memoria da liberare.");
+        return;
+      }
+      const b = heapBlocks.pop();
+      updateHeapTerminal(`free(): Restituiti ${b.size} Byte al magazzino del computer.`);
+    }
+
+    function heapLosePointer() {
+      if (heapBlocks.length === 0) {
+        updateHeapTerminal("Alloca prima un blocco di memoria con malloc!");
+        return;
+      }
+      const b = heapBlocks[heapBlocks.length - 1];
+      updateHeapTerminal(`ATTENZIONE! Hai perso il biglietto con l'indirizzo senza chiamare free()!\n` +
+                         `Risultato: MEMORY LEAK! ${b.size} Byte sono rimasti occupati nel computer e non possono più essere liberati!`);
+    }
+
+    function updateHeapTerminal(extraMsg) {
+      const term = document.getElementById('heap-terminal');
+      const totalBytes = heapBlocks.reduce((acc, b) => acc + b.size, 0);
+      term.innerHTML = `${extraMsg}\n\n` +
+                       `Stato Magazzino Memoria: ${heapBlocks.length} blocchi attivi | Spazio occupato: ${totalBytes} Byte.`;
+    }
+
+    function escapeHtml(string) {
+      return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
