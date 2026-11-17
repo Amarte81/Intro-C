@@ -111,37 +111,49 @@
     }
 
     .btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.14), rgba(56, 189, 248, 0.06));
+      border: 1px solid rgba(56, 189, 248, 0.45);
       color: var(--text-main);
-      padding: 0.5rem 0.9rem;
+      padding: 0.52rem 0.95rem;
       border-radius: 8px;
       font-size: 0.9rem;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
       transition: var(--transition);
     }
 
-    .btn:hover {
-      background: var(--bg-card-hover);
+    .btn:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.22);
       border-color: var(--accent);
       color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
     }
 
     .btn-primary {
       background: var(--accent);
       color: #0f172a;
       border-color: var(--accent);
-      font-weight: 600;
+      font-weight: 700;
+      box-shadow: 0 3px 10px var(--accent-glow);
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       background: #7dd3fc;
       color: #0f172a;
       border-color: #7dd3fc;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px var(--accent-glow);
     }
 
     .slide-progress-container {
@@ -222,11 +234,14 @@
       gap: 0.35rem;
       background: var(--badge-bg);
       color: var(--badge-color);
-      border: 1px solid var(--badge-color);
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
-      font-size: 0.78rem;
-      font-weight: 600;
+      border-left: 3px solid var(--badge-color);
+      padding: 0.22rem 0.65rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: default;
     }
 
     .slide-title {
@@ -264,12 +279,7 @@
       border: 1px solid var(--border-color);
       border-radius: var(--radius);
       padding: 1.35rem;
-      transition: var(--transition);
-    }
-
-    .card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 4px 15px var(--accent-glow);
+      cursor: default;
     }
 
     .card h3 {
@@ -329,10 +339,28 @@
     .video-box-info {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
+      gap: 0.65rem;
       font-size: 0.9rem;
       color: var(--text-main);
       font-weight: 500;
+    }
+
+    .video-icon {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .video-box-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+
+    .video-box-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 0.15rem;
     }
 
     .video-box-links {
@@ -539,20 +567,24 @@
       padding: 0.8rem 1rem;
       border-radius: 8px;
       border: 1px solid var(--border-color);
+      border-left: 3px solid var(--accent);
       background: var(--bg-secondary);
       color: var(--text-main);
       cursor: pointer;
       font-size: 0.92rem;
+      font-weight: 500;
       transition: var(--transition);
       display: flex;
       align-items: center;
       gap: 0.75rem;
       line-height: 1.4;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
     }
 
     .quiz-btn:hover:not(:disabled) {
       border-color: var(--accent);
-      background: var(--bg-card-hover);
+      background: rgba(56, 189, 248, 0.12);
+      transform: translateX(3px);
     }
 
     .quiz-btn.correct {
@@ -804,52 +836,52 @@
         </div>
 
         <div class="dashboard-grid">
-          <div class="dash-card" onclick="goToSlide(1)">
+          <div class="dash-card" onclick="goToSlide('slide-1')">
             <div class="dash-num">01</div>
             <div class="dash-title">Come Funziona un Computer</div>
             <div class="dash-meta">Compilatore & Primo Programma</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(5)">
+          <div class="dash-card" onclick="goToSlide('slide-4')">
             <div class="dash-num">02</div>
             <div class="dash-title">Le Variabili</div>
             <div class="dash-meta">Scatole per i Dati in Memoria</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(9)">
+          <div class="dash-card" onclick="goToSlide('slide-7')">
             <div class="dash-num">03</div>
             <div class="dash-title">Calcoli & I/O</div>
             <div class="dash-meta">Operatori, printf & scanf</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(13)">
+          <div class="dash-card" onclick="goToSlide('slide-10')">
             <div class="dash-num">04</div>
             <div class="dash-title">Prendere Decisioni</div>
             <div class="dash-meta">I comandi if, else e switch</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(17)">
+          <div class="dash-card" onclick="goToSlide('slide-13')">
             <div class="dash-num">05</div>
             <div class="dash-title">Ripetere Istruzioni</div>
-            <div class="dash-meta">I Cicli while e for</div>
+            <div class="dash-meta">I Cicli while, do-while e for</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(21)">
+          <div class="dash-card" onclick="goToSlide('slide-16')">
             <div class="dash-num">06</div>
             <div class="dash-title">Le Funzioni</div>
             <div class="dash-meta">Costruire i Propri Strumenti</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(25)">
+          <div class="dash-card" onclick="goToSlide('slide-19')">
             <div class="dash-num">07</div>
             <div class="dash-title">Gli Array & Testo</div>
             <div class="dash-meta">File di Dati e Stringhe</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(29)">
+          <div class="dash-card" onclick="goToSlide('slide-22')">
             <div class="dash-num">08</div>
             <div class="dash-title">I Puntatori</div>
             <div class="dash-meta">Gli Indirizzi della Memoria</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(33)">
+          <div class="dash-card" onclick="goToSlide('slide-25')">
             <div class="dash-num">09</div>
             <div class="dash-title">Le Strutture</div>
             <div class="dash-meta">Creare Schede di Dati Complete</div>
           </div>
-          <div class="dash-card" onclick="goToSlide(37)">
+          <div class="dash-card" onclick="goToSlide('slide-28')">
             <div class="dash-num">10</div>
             <div class="dash-title">La Memoria del Computer</div>
             <div class="dash-meta">Organizzare lo Spazio di Lavoro</div>
@@ -1290,7 +1322,7 @@
             <div class="analogy-title">⚖ Approfondimento: Misurare lo Spazio in RAM con l'Operatore sizeof</div>
             <div class="analogy-text">In C puoi chiedere direttamente al computer quanti byte occupa qualsiasi variabile, tipo o array tramite l'operatore speciale <code>sizeof</code>.</div>
           </div>
-          <button class="btn btn-primary" onclick="goToSlide(42)" style="font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+          <button class="btn btn-primary" onclick="goToSlide('slide-sizeof')" style="font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
             Approfondimento su sizeof &rarr;
           </button>
         </div>
@@ -2972,14 +3004,14 @@ Magazzino pronto. Memoria attualmente occupata: 0 Byte.
         </div>
 
         <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
-          <button class="btn" onclick="goToSlide(7)">
+          <button class="btn" onclick="goToSlide('slide-6')">
             &larr; Torna alla Tabella dei Tipi (Lezione 2)
           </button>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            <button class="btn" onclick="goToSlide(41)">
+            <button class="btn" onclick="goToSlide('slide-quiz-10')">
               &larr; Torna al Quiz Finale (Lezione 10)
             </button>
-            <button class="btn btn-primary" onclick="goToSlide(43)">
+            <button class="btn btn-primary" onclick="goToSlide('slide-32')">
               Concludi il Corso &rarr;
             </button>
           </div>
@@ -3027,7 +3059,7 @@ Magazzino pronto. Memoria attualmente occupata: 0 Byte.
         </div>
 
         <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
-          <button class="btn btn-primary" onclick="goToSlide(0)">Ricomincia dalla Dashboard</button>
+          <button class="btn btn-primary" onclick="goToSlide('slide-0')">Ricomincia dalla Dashboard</button>
           <button class="btn" onclick="openTocModal()">Sfoglia l'Indice delle Lezioni</button>
         </div>
       </section>
@@ -3084,7 +3116,10 @@ Magazzino pronto. Memoria attualmente occupata: 0 Byte.
     });
 
     // Navigazione Slide
-    function goToSlide(index) {
+    function goToSlide(target) {
+      const index = typeof target === 'string'
+        ? Array.from(slides).findIndex(s => s.id === target)
+        : target;
       if (index >= 0 && index < totalSlides) {
         slides[currentSlide].classList.remove('active');
         currentSlide = index;
